@@ -1,0 +1,38 @@
+.env - where we store our secret key (not in git)
+.env.example - where we store our example secret key (in git)
+.gitignore - standard template from here: https://github.com/github/gitignore/blob/main/Python.gitignore
+
+
+Dependencies:
+pip install {placeholder}
+langchain - <3
+pypdf2 - to read our pdf files
+python-dotenv  - to enable the environment variable
+streamlit - gui
+
+msc:
+tiktoken -- openai embeddings
+faiss -- similarity search
+-- later on check through the app and get a requirements.txt
+
+Library FAISS, imported from langchain for similarity search.
+
+
+
+https://bennycheung.github.io/ask-a-book-questions-with-langchain-openai
+https://www.youtube.com/watch?v=wUAUdEw5oxM
+https://python.langchain.com/en/latest/index.html
+https://github.com/alejandro-ao/langchain-ask-pdf
+
+
+use these to understand further & make it flexible.
+https://python.langchain.com/en/latest/use_cases/question_answering.html
+https://python.langchain.com/en/latest/modules/indexes/getting_started.html
+
+
+
+TO DO:
+1) modularise the main function
+2) learn about which model langchain uses from openAI and make changes if necessary.
+3) try pre-prompting the model maybe.
+4) finalise the readme file & the repository.
