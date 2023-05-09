@@ -35,4 +35,5 @@ TO DO:
 1) modularise the main function
 2) learn about which model langchain uses from openAI and make changes if necessary.
 3) try pre-prompting the model maybe.
-4) finalise the readme file & the repository.
+4) make sure there's a requirements.txt
+5) finalise the readme file & the repository.
