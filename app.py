@@ -43,7 +43,7 @@ def main():
         user_question = st.text_input("Ask me a question about your PDF:")
         if user_question:
             # relative chunks
-            docs = knowledge_base.similarity_search(user_question) # add k parameter to limit the number of results
+            docs = knowledge_base.similarity_search(user_question, k=5) # add k parameter to limit the number of results
             
             llm = OpenAI()
 
@@ -56,6 +56,8 @@ def main():
                 print(callback)
 
             st.write(response)
+
+
 
 if __name__ == '__main__':
     main()
