@@ -1,119 +1,63 @@
-from dotenv import load_dotenv
 import streamlit as st
-from PyPDF2 import PdfReader
-from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.vectorstores import FAISS
-from langchain.chains.question_answering import load_qa_chain
-from langchain.llms import OpenAI
-from langchain.callbacks import get_openai_callback
+from streamlit_chat import message
+from streamlit_extras.colored_header import colored_header
+from streamlit_extras.add_vertical_space import add_vertical_space
+from hugchat import hugchat
 
+st.set_page_config(page_title="HugChat - An LLM-powered Streamlit app")
 
+# Sidebar contents
+with st.sidebar:
+    st.title('🤗💬 HugChat App')
+    st.markdown('''
+    ## About
+    This app is an LLM-powered chatbot built using:
+    - [Streamlit](https://streamlit.io/)
+    - [HugChat](https://github.com/Soulter/hugging-chat-api)
+    - [OpenAssistant/oasst-sft-6-llama-30b-xor](https://huggingface.co/OpenAssistant/oasst-sft-6-llama-30b-xor) LLM model
+    
+    💡 Note: No API key required!
+    ''')
+    add_vertical_space(5)
+    st.write('Made with ❤️ by [Data Professor](https://youtube.com/dataprofessor)')
 
+# Generate empty lists for generated and past.
+## generated stores AI generated responses
+if 'generated' not in st.session_state:
+    st.session_state['generated'] = ["I'm HugChat, How may I help you?"]
+## past stores User's questions
+if 'past' not in st.session_state:
+    st.session_state['past'] = ['Hi!']
 
-def upload_pdf():
-    # upload the file
-    pdf = st.file_uploader("Upload a PDF file", type=["pdf"])
-    return pdf
+# Layout of input/response containers
+input_container = st.container()
+colored_header(label='', description='', color_name='blue-30')
+response_container = st.container()
 
+# User input
+## Function for taking user provided prompt as input
+def get_text():
+    input_text = st.text_input("You: ", "", key="input")
+    return input_text
+## Applying the user input box
+with input_container:
+    user_input = get_text()
 
-## maybe introduce this later
-# def upload_file():
-#     # upload the file, now supporting pdf, docx and txt files
-#     file = st.file_uploader("Upload a file", type=["pdf", "docx", "txt"])
-#     return file
-
-
-
-def extract_text_from_pdf(pdf):
-    # extract the text
-    pdf_reader = PdfReader(pdf)
-    text = ""
-    for page in pdf_reader.pages:
-        text += page.extract_text()
-    return text
-
-def extract_text_from_docx(docx):
-    # code for extracting text from a Word document
-    print("Code to extract text from a Word document goes here")
-
-
-def get_raw_text():
-    # get raw text input from the user
-    text = st.text_area("Or enter your text here:")
-    return text
-
-
-
-def split_text_into_chunks(text):
-    # split into chunks
-    text_splitter = CharacterTextSplitter(
-        separator= "\n",
-        chunk_size=1000,
-        chunk_overlap=200,
-        length_function=len
-    )
-    chunks = text_splitter.split_text(text)
-    return chunks
-
-def create_embeddings(chunks):
-    # create embeddings
-    embeddings = OpenAIEmbeddings()
-    knowledge_base = FAISS.from_texts(chunks,embeddings)
-    return knowledge_base
-
-def get_user_question():
-    # show user input
-    user_question = st.text_input("Ask me a question about your PDF:")
-    return user_question
-
-def get_relative_chunks(knowledge_base, user_question):
-    # relative chunks
-    docs = knowledge_base.similarity_search(user_question, k=5) # add k parameter to limit the number of results
-    return docs
-
-def run_chain(llm, docs, user_question):
-    chain = load_qa_chain(llm, chain_type="stuff")
-    # inside of this run whatever we want to track the price of
-    ## currently this langchain function only works with open AI
-    with get_openai_callback() as callback:
-        response = chain.run(input_documents=docs, question=user_question)
-        print(callback)
+# Response output
+## Function for taking user prompt as input followed by producing AI generated responses
+def generate_response(prompt):
+    chatbot = hugchat.ChatBot()
+    response = chatbot.chat(prompt)
     return response
 
-## remove this function
-# def write_response(response):
-#     st.write(response)
-
-def main():
-    load_dotenv() # allows the environment variables to be used e.g print(os.getenv("OPENAI_API_KEY"))
-    st.set_page_config(page_title="Ask me about your PDF") # can add parameters to style the page
-    st.header("Ask me about your PDF ..")
-
-
-    ## decide to remove or not.
-    # # maybe show after a click of a button?
-    # # copy paste a text to question
-    # user_text = st.text_area("Enter your text here:")
-
-
-
-    # get a pdf upload
-    pdf = upload_pdf()
-
-
-    user_question = get_user_question()
-
-    if user_question:
-        if pdf is not None:
-            text = extract_text_from_pdf(pdf)
-
-            chunks = split_text_into_chunks(text)
-            knowledge_base = create_embeddings(chunks)
-            docs = get_relative_chunks(knowledge_base, user_question)
-            llm = OpenAI()
-            response = run_chain(llm, docs, user_question)
-            st.write(response)
-
-if __name__ == '__main__':
-    main()
+## Conditional display of AI generated responses as a function of user provided prompts
+with response_container:
+    if user_input:
+        response = generate_response(user_input)
+        st.session_state.past.append(user_input)
+        st.session_state.generated.append(response)
+        
+    if st.session_state['generated']:
+        for i in range(len(st.session_state['generated'])):
+            message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
+            message(st.session_state["generated"][i], key=str(i))

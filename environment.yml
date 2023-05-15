@@ -1,0 +1,7 @@
+name: ai_apps
+channels:
+  - defaults
+dependencies:
+  - pip
+  - pip:
+    - -r file:requirements.txt
