@@ -109,7 +109,7 @@ def main():
             chunks = split_text_into_chunks(text)
             knowledge_base = create_embeddings(chunks)
             docs = get_relative_chunks(knowledge_base, user_question)
-            llm = OpenAI()
+            llm = OpenAI(model_name="gpt-3.5-turbo")
             response = run_chain(llm, docs, user_question)
             st.write(response)
 

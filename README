@@ -2,8 +2,9 @@
 .env.example - where we store our example secret key (in git)
 .gitignore - standard template from here: https://github.com/github/gitignore/blob/main/Python.gitignore
 
+pip install langchain pypdf2 python-dotenv streamlit tiktoken faiss
 
-Dependencies:
+Main dependencies:
 pip install {placeholder}
 langchain - <3
 pypdf2 - to read our pdf files
@@ -11,12 +12,15 @@ python-dotenv  - to enable the environment variable
 streamlit - gui
 
 msc:
+openai
 tiktoken -- openai embeddings
 faiss -- similarity search
 -- later on check through the app and get a requirements.txt
 
 Library FAISS, imported from langchain for similarity search.
 
+faiss doesnt support windows officially but faiss-cpu works.
+if linux or mac -> go with faiss-gpu
 
 
 https://bennycheung.github.io/ask-a-book-questions-with-langchain-openai
@@ -32,8 +36,19 @@ https://python.langchain.com/en/latest/modules/indexes/getting_started.html
 
 
 TO DO:
-1) modularise the main function
+1) modularise the main function 
 2) learn about which model langchain uses from openAI and make changes if necessary.
 3) try pre-prompting the model maybe.
 4) make sure there's a requirements.txt
 5) finalise the readme file & the repository.
+6) multiple files.
+
+DONE: 
+1,2,4
+
+FOR LATER:
+3,5
+
+env names for reference:
+ai_apps - desktop (I think this one is dirty and causes a messy requirements.txt to begin with.)
+aiplayground - laptop
