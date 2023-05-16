@@ -15,6 +15,8 @@ msc:
 openai
 tiktoken -- openai embeddings
 faiss -- similarity search
+python-docx -- to extract text from docx
+
 -- later on check through the app and get a requirements.txt
 
 Library FAISS, imported from langchain for similarity search.
