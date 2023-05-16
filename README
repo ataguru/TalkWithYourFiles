@@ -44,9 +44,13 @@ TO DO:
 4) make sure there's a requirements.txt
 5) finalise the readme file & the repository.
 6) multiple files.
+7) some pdf files are not parsable soo maybe a initial step to verify that and give prompts to user?
+8) classes maybe?
+9)
+
 
 DONE: 
-1,2,4
+1,2,4,6
 
 FOR LATER:
 3,5
