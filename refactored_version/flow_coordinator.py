@@ -8,7 +8,7 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 
 factory = FileHandlerFactory()
-processor = DefaultTextProcessor() #the name is not confusing due to having multiple processors. Turn it to text_processor and update the rest.
+processor = DefaultTextProcessor()
 runner = QAChainRunner()
 
 def run(files, user_question):
