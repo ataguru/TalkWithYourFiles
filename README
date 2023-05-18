@@ -51,7 +51,7 @@ main.py
 5) push the final version to github
 6) try to release to reddit, friends etc. to get feedback and contributions.
 
-
+*** COOL the refactored version works great. streamlit run streamlit_interface.py
 DONE: 
 1,2,4,6
 
