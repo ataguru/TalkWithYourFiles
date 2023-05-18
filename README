@@ -38,15 +38,18 @@ https://python.langchain.com/en/latest/modules/indexes/getting_started.html
 
 
 TO DO:
-1) modularise the main function 
-2) learn about which model langchain uses from openAI and make changes if necessary.
-3) try pre-prompting the model maybe.
-4) make sure there's a requirements.txt
-5) finalise the readme file & the repository.
-6) multiple files.
-7) some pdf files are not parsable soo maybe a initial step to verify that and give prompts to user?
-8) classes maybe?
-9)
+1) finalise the refactored version
+2) modularise & refactor each file
+file_handlers.py <3 done
+text_processor.py is on the way. actually done, but not sure if openaiembeddings cost money.
+Try to track that.
+qa_chain.py 
+main.py
+
+3) after each file is done & program is working, organise the files and isolate this project
+4) finalise this readme file. add a section for future improvements
+5) push the final version to github
+6) try to release to reddit, friends etc. to get feedback and contributions.
 
 
 DONE: 
