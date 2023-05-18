@@ -38,17 +38,9 @@ https://python.langchain.com/en/latest/modules/indexes/getting_started.html
 
 
 TO DO:
-1) finalise the refactored version
-2) modularise & refactor each file
-file_handlers.py <3 done
-text_processor.py is on the way. actually done, but not sure if openaiembeddings cost money.
-Try to track that.
-qa_chain.py 
-main.py
-
-3) after each file is done & program is working, organise the files and isolate this project
-4) finalise this readme file. add a section for future improvements
-5) push the final version to github
+1) share all the files again with the gpt. 
+2) ask if changing print statements to loggings in other files as well.
+3) consider changing the name of the file_processor.py it does more than that. and the name is conflicting.
 6) try to release to reddit, friends etc. to get feedback and contributions.
 
 *** COOL the refactored version works great. streamlit run streamlit_interface.py

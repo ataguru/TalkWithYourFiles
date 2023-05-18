@@ -1,5 +1,5 @@
 import streamlit as st
-from file_processor import run
+from flow_coordinator import run
 
 def main():
     """Main function to run the Streamlit interface and execute the run function from file_processor."""
