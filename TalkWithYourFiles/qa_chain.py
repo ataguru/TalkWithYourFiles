@@ -21,7 +21,8 @@ Design Pattern:
     """
 
 class QAChainRunner:
-    def __init__(self, model_name="gpt-3.5-turbo"):
+    ## by default it uses 'text-davinci-003' model from OpenAI, for simpler tasks with reduced costs 'gpt-3.5-turbo' can be used.
+    def __init__(self, model_name="text-davinci-003"):
         """Initialize the QAChainRunner with a specific model.
 
         Parameters:
