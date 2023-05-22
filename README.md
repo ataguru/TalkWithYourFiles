@@ -18,7 +18,7 @@ Streamlit - Prepare the GUI
 2. Run the application: `streamlit run streamlit_interface.py`
 3. Wait for the application to run on your browser.
 4. Upload your files and enter your question in the provided fields.
-5. Wait for the response to be generated.
+5. Wait for the response to be generated & check out your terminal to see the cost.
 
 ## Tips
 1. Check individual modules for further documentation.
