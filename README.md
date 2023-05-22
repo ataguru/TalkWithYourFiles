@@ -1,4 +1,4 @@
-# Talk With Your Files (LLM (Langchain), GUI(Streamlit))
+# Talk With Your Files (LLM(Langchain), GUI(Streamlit))
 
 ## Description
 Talk-With-Your-Files is an open source GUI (Graphical User Interface) application powered by LLMs (Large Language Models). It allows you to ask questions about your PDF, DOCX, CSV, or TXT files and get relevant answers.
