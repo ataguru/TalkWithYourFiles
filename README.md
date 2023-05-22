@@ -38,4 +38,4 @@ Some points to improve/add in in the future:
 This project is licensed under the [MIT License](LICENSE).
 
 ## Diagrams
-![Script Overview](images/script_overview.jpg)
+![Script Overview](images/script_overview.png)
