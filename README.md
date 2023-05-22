@@ -42,4 +42,4 @@ This project is licensed under the [MIT License](LICENSE).
 ![Script Overview](images/script_overview.png)
 
 ### Process Overview
-![Script Overview](images/process_overview.png)
+![Script Overview](images/process_overview2.png)
