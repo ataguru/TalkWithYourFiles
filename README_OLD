@@ -1,0 +1,55 @@
+.env - where we store our secret key (not in git)
+.env.example - where we store our example secret key (in git)
+.gitignore - standard template from here: https://github.com/github/gitignore/blob/main/Python.gitignore
+
+pip install langchain pypdf2 python-dotenv streamlit tiktoken faiss
+
+Main dependencies:
+pip install {placeholder}
+langchain - <3
+pypdf2 - to read our pdf files
+python-dotenv  - to enable the environment variable
+streamlit - gui
+
+msc:
+openai
+tiktoken -- openai embeddings
+faiss -- similarity search
+python-docx -- to extract text from docx
+
+-- later on check through the app and get a requirements.txt
+
+Library FAISS, imported from langchain for similarity search.
+
+faiss doesnt support windows officially but faiss-cpu works.
+if linux or mac -> go with faiss-gpu
+
+
+https://bennycheung.github.io/ask-a-book-questions-with-langchain-openai
+https://www.youtube.com/watch?v=wUAUdEw5oxM
+https://python.langchain.com/en/latest/index.html
+https://github.com/alejandro-ao/langchain-ask-pdf
+
+
+use these to understand further & make it flexible.
+https://python.langchain.com/en/latest/use_cases/question_answering.html
+https://python.langchain.com/en/latest/modules/indexes/getting_started.html
+
+
+
+TO DO:
+1) share all the files again with the gpt. 
+2) ask if changing print statements to loggings in other files as well.
+3) comprehensive readme file & documentation
+4) try to release to reddit, friends etc. to get feedback and contributions.
+
+*** COOL the refactored version works great. streamlit run streamlit_interface.py
+DONE: 
+1,2,4,6
+
+FOR LATER:
+3,5
+
+env names for reference:
+ai_apps - desktop (I think this one is dirty and causes a messy requirements.txt to begin with.)
+aiplayground - laptop
