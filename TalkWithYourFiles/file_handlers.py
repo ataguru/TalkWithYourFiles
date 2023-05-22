@@ -3,6 +3,18 @@ from PyPDF2 import PdfReader
 from docx import Document
 
 
+"""
+In this file Factory Design Pattern is used to make this functionalities more flexible & maintainable.
+Currently there are four main file handlers for PDF, DOCX, CSV, TXT. 
+
+To extend these file types: 
+1) Create a new subclass of FileHandler in this file.
+2) Implement the read_file method: define the logic to process the file and return the extracted text
+3) Modify the FileHandlerFactory class to include your new subclass setting up the logic based on the input file's file type. 
+
+"""
+
+
 class FileHandler(ABC):
     """Abstract base class for file handlers."""
 
@@ -86,6 +98,25 @@ class TxtHandler(FileHandler):
             print(f"Error reading text file: {e}")
             return ""
 
+class CSVFileHandler(FileHandler):
+    def read_file(self, file):
+        """
+        Read the contents of a CSV file.
+
+        Args:
+            file: Uploaded file object.
+
+        Returns:
+            str: Contents of the CSV file.
+        """
+        try:
+            csv_data = file.read().decode('utf-8')
+            return csv_data
+        except UnicodeDecodeError:
+            # Handle decoding error
+            return None
+
+
 class FileHandlerFactory:
     """Factory for creating file handlers based on file type."""
 
@@ -109,5 +140,7 @@ class FileHandlerFactory:
             return DocxHandler()
         elif file_type == "text/plain":
             return TxtHandler()
+        elif file_type == "text/csv":
+            return CSVFileHandler()
         else:
             raise ValueError("Invalid file type")

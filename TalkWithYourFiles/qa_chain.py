@@ -2,6 +2,23 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 
+"""
+In this file QAChainRunner class is implemented, which is responsible for running the Question Answering (QA) chain
+on provided documents and questions.
+
+The class utilizes the Langchain library for the underlying question answering capabilities.
+
+Usage:
+    1. Create an instance of QAChainRunner.
+    1.1 Optionally, specify the model name to use from OpenAI.
+    1.2 To use non-OpenAI models modify the self.llm instance variable.
+    2. Use the 'get_relative_chunks' method to find the most relevant chunks in the knowledge base for a given question.
+    3. Use the 'run_chain' method to execute the QA chain on the provided documents and question.
+
+Design Pattern:
+    This class follows the Chain of Responsibility design pattern, where each step in the QA chain acts as a handler
+    and can process the question or pass it to the next handler.
+    """
 
 class QAChainRunner:
     def __init__(self, model_name="gpt-3.5-turbo"):
