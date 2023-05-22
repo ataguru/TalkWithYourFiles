@@ -37,5 +37,5 @@ Some points to improve/add in in the future:
 ## License
 This project is licensed under the [MIT License](LICENSE).
 
-## Example Screenshot
-![Example Screenshot](images/example_screenshot.jpg)
+## Diagrams
+![Script Overview](images/script_overview.jpg)
