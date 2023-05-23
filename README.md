@@ -21,7 +21,7 @@ Streamlit - Prepare the GUI
 5. Wait for the response to be generated & check out your terminal to see the cost.
 
 ## Tips
-1. Check individual modules for further documentation.
+1. Check individual modules for further documentation. 
 2. LLM model to be used can be changed easily by modifying the qa_chain.py file.
 3. New files to be supported can be integrated into the app by modifying the file_handlers.py
 4. To use another GUI framework, create your application based on your needs, and import the run function from the flow_coordinator.py
