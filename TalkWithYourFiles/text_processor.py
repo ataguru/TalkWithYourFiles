@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from langchain.text_splitter import CharacterTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 
@@ -61,12 +62,21 @@ class DefaultTextProcessor(TextProcessor):
         list: The text chunks.
 
         """
-        text_splitter = CharacterTextSplitter(
-            separator="\n",
-            chunk_size=1000,
-            chunk_overlap=200,
+        # will be deprecated
+        # text_splitter = CharacterTextSplitter(
+        #     separator="\n",
+        #     chunk_size=1000,
+        #     chunk_overlap=200,
+        #     length_function=len
+        # )
+
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1000, 
+            chunk_overlap=100, 
+            separators=[" ", ",", "\n"],
             length_function=len
         )
+
         return text_splitter.split_text(text)
 
     def create_embeddings(self, chunks):
