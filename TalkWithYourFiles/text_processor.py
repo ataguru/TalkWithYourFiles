@@ -3,6 +3,10 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
+from parameter_controller import ParameterController
+import logging
+
+
 
 """
 In this file Strategy Design Pattern is used to make this functionalities more flexible & maintainable.
@@ -69,15 +73,18 @@ class DefaultTextProcessor(TextProcessor):
         #     chunk_overlap=200,
         #     length_function=len
         # )
+        chunk_size = ParameterController.get_instance().get_parameter('chunk_size')['value']
 
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000, 
+            chunk_size=chunk_size, 
             chunk_overlap=100, 
             separators=[" ", ",", "\n"],
             length_function=len
         )
 
-        return text_splitter.split_text(text)
+        chunks = text_splitter.split_text(text)
+
+        return chunks
 
     def create_embeddings(self, chunks):
         """Create embeddings from the text chunks.
