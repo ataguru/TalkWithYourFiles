@@ -29,20 +29,20 @@ run() Function: The main function in this file is the run() function, which take
 
 """
 class FlowCoordinator:
-
-    def __init__(self):
+    def __init__(self, param_controller):
         """Constructor for FlowCoordinator"""
+        self.param_controller = param_controller
+        
         load_dotenv()
         logging.basicConfig(level=logging.INFO)
 
-        # Registering parameters
-        param_controller = ParameterController.get_instance()
-        param_controller.register_parameter('chunk_size', int, 1000, 'Chunk size for text splitting', min=200, max=2000)
 
         self.factory = FileHandlerFactory()
-        self.processor = DefaultTextProcessor()
-        self.runner = QAChainRunner()
+        self.processor = DefaultTextProcessor(param_controller)
+        self.runner = QAChainRunner(param_controller)
+        self.runner.setup()
 
+    ### add in more comments - step by step explanations
     def run(self, files, user_question):
         """Main function to process uploaded files and user's question, and run QA chain runner.
         Args:

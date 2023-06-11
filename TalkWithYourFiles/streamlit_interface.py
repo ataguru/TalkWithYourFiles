@@ -16,48 +16,112 @@ def main():
 
     
     """
-    ##### FLOW COORDINATOR
-    # load environment variables, 
-    # prepare parameters, 
-    # initialize file handler factory, text processor, qa chain runner
-    # import the definition of the run function
-    flow_coordinator = FlowCoordinator()
 
-
-    st.set_page_config(page_title="Talk With Your Files")  # can add parameters to style the page
+    ##### PAGE CONFIGURATIONS
+    st.set_page_config(
+                    page_title="Talk With Your Files",
+                    page_icon="random",
+                    layout="centered", # centered or wide
+                    initial_sidebar_state="collapsed", #auto, expanded, collapsed
+                    menu_items={
+                        'Get Help': 'https://github.com/Safakan',
+                        'Report a bug': "https://github.com/Safakan/TalkWithYourFiles-LLM-GUI",
+                        'About': "# This is a header. This is an *extremely* cool app!"
+                        }
+                    )
+    
+    ##### HEADER
     st.header("Talk With Your Files")
 
+    ##### SIDEBAR
+    st.sidebar.header("Talk With Your Files")
+    st.sidebar.write("Hello and welcome! I hope this helps you! <3")
+
+    ##### FILE UPLOADS
     files = st.file_uploader("Upload files", type=["pdf", "docx", "txt","csv"], accept_multiple_files=True)
 
+
+
     ### TEST AREA START ###
-    ## a toggle switch for verbose logging, not in use right now.
+    show_advanced = st.checkbox("Show advanced parameters?")
+    ##If used values here will be used as parameters. 
+    ##If not default values were already registered in the flow_coordinator.py
 
-    st.sidebar.header("Advanced Settings")
-    show_advanced = st.sidebar.checkbox("Show Advanced Settings")
     if show_advanced:
-        ## implement parameter controller logic
-        param_controller = ParameterController.get_instance()
-        chunk_size_param = param_controller.get_parameter('chunk_size')
+        ## Instantiating a ParameterController instance to be used in the flow_coordinator at the end.
+        param_controller = ParameterController()
+        
+        ## Registering default parameters.
+        param_controller.setup_default_parameters()        
 
-        ## remove later or integrate
-        # st.sidebar.subheader("Text Processing")
-        #verbose_logging = st.checkbox('Verbose Logging')
 
-        # Set up the chunk size slider & dynamically adjust the parameter in the param_controller
-        chunk_size_GUI = st.slider("Set Chunk Size", min_value=chunk_size_param['min'], max_value=chunk_size_param['max'], value=chunk_size_param['value'])
-        param_controller.set_parameter('chunk_size', chunk_size_GUI)  # Update the parameter after interaction with the slider
+        ## Get Parameters (default)
+        # chunk size
+        chunk_size_param_dict = param_controller.get_parameter('chunk_size')
+        # chunk overlap
+        chunk_overlap_param_dict = param_controller.get_parameter('chunk_overlap')
+        # top related chunks / chunks to retrieve
+        top_related_chunks_param_dict = param_controller.get_parameter('top_related_chunks')
+
+        # model name from OpenAI
+        model_name_param_dict = param_controller.get_parameter('model_name') 
+
+
+
+
+        ### GUI
+        ## columns to configure parameters in the GUI
+        col1, col2, col3 = st.columns(3)
+        
+        ## Text processing parameters
+        with col1:
+            chunk_size_GUI = st.slider("Chunk Size", 
+                                       min_value=chunk_size_param_dict['min'], 
+                                       max_value=chunk_size_param_dict['max'], 
+                                       value=chunk_size_param_dict['value']
+                                       )
+
+        with col2:
+            chunk_overlap_GUI = st.slider("Chunk Overlap",
+                                       min_value=chunk_overlap_param_dict['min'], 
+                                       max_value=chunk_overlap_param_dict['max'], 
+                                       value=chunk_overlap_param_dict['value']
+                                       )
+            
+        with col3:
+            top_related_chunks_GUI = st.slider("Top Related Chunks",
+                                        min_value=top_related_chunks_param_dict['min'],
+                                        max_value=top_related_chunks_param_dict['max'],
+                                        value=top_related_chunks_param_dict['value']                                   
+                                        )
+
+
+        model_name_GUI = st.selectbox('Select a Model:', model_name_param_dict['model_list'])
+
+
+        # Update the parameters in the parameter controller after the interactions with the slider.
+        param_controller.set_parameter('chunk_size', chunk_size_GUI)
+        param_controller.set_parameter('chunk_overlap', chunk_overlap_GUI)
+        param_controller.set_parameter('top_related_chunks', top_related_chunks_GUI)
+        param_controller.set_parameter('model_name', model_name_GUI)
         
 
     ### TEST AREA END ###
 
 
 
+    ##### USER QUESTION INPUT
     user_question = st.text_input("Please ask me about your uploaded files and I shall help you: ")
 
 
+    ##### QA CHAIN RUN BUTTON
+    run_button_clicked = st.button("Run",
+                                   use_container_width=True                                   
+                                   )
 
-
-    if user_question and files:
+    ##### START QA CHAIN
+    if user_question and files and run_button_clicked:
+        flow_coordinator = FlowCoordinator(param_controller)        
         response = flow_coordinator.run(files, user_question)
         st.write(response)
 

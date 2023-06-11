@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
-from langchain.text_splitter import CharacterTextSplitter
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from parameter_controller import ParameterController
-import logging
+
 
 
 
@@ -56,6 +55,9 @@ class TextProcessor(ABC):
 class DefaultTextProcessor(TextProcessor):
     """Default text processor."""
 
+    def __init__(self, param_controller):
+        self.param_controller = param_controller
+
     def split_text(self, text):
         """Split the text into chunks.
 
@@ -64,26 +66,20 @@ class DefaultTextProcessor(TextProcessor):
 
         Returns:
         list: The text chunks.
-
         """
-        # will be deprecated
-        # text_splitter = CharacterTextSplitter(
-        #     separator="\n",
-        #     chunk_size=1000,
-        #     chunk_overlap=200,
-        #     length_function=len
-        # )
-        chunk_size = ParameterController.get_instance().get_parameter('chunk_size')['value']
+
+        #### PRE- SET UP CHUNK CONFIGS
+        chunk_size = self.param_controller.get_parameter('chunk_size')['value']
+        chunk_overlap = self.param_controller.get_parameter('chunk_overlap')['value']
 
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=chunk_size, 
-            chunk_overlap=100, 
+            chunk_overlap=chunk_overlap, 
             separators=[" ", ",", "\n"],
             length_function=len
         )
 
         chunks = text_splitter.split_text(text)
-
         return chunks
 
     def create_embeddings(self, chunks):
@@ -96,6 +92,7 @@ class DefaultTextProcessor(TextProcessor):
         list: The embeddings.
 
         """
+        #### can this function be called without any chunks?
         if not chunks:
             return None
         embeddings = OpenAIEmbeddings()
