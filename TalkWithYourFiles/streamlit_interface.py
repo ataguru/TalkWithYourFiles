@@ -13,7 +13,6 @@ def main():
     1) Make sure to set up a GUI that allows users to upload files & enter text input for their questions.
     2) Import the run method from the flow_coordinator.py
     3) Get the response by running the run(files, user_question) method with the appropriate arguments. 
-
     
     """
 
@@ -47,14 +46,16 @@ def main():
     ##If used values here will be used as parameters. 
     ##If not default values were already registered in the flow_coordinator.py
 
+
+
+    ## Instantiating a ParameterController instance to be used in the flow_coordinator at the end.
+    param_controller = ParameterController()
+    
+    ## Registering default parameters.
+    param_controller.setup_default_parameters()     
+
+
     if show_advanced:
-        ## Instantiating a ParameterController instance to be used in the flow_coordinator at the end.
-        param_controller = ParameterController()
-        
-        ## Registering default parameters.
-        param_controller.setup_default_parameters()        
-
-
         ## Get Parameters (default)
         # chunk size
         chunk_size_param_dict = param_controller.get_parameter('chunk_size')
@@ -62,7 +63,6 @@ def main():
         chunk_overlap_param_dict = param_controller.get_parameter('chunk_overlap')
         # top related chunks / chunks to retrieve
         top_related_chunks_param_dict = param_controller.get_parameter('top_related_chunks')
-
         # model name from OpenAI
         model_name_param_dict = param_controller.get_parameter('model_name') 
 

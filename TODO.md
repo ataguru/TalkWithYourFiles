@@ -46,3 +46,6 @@ In terms of error handling, consider introducing custom exception classes instea
 It would be beneficial to add logging throughout your application. This would help in debugging and also in understanding how your application is behaving in production.
 For long-running processes, consider implementing a progress monitoring system to give users feedback on the state of the operation.
 Consider adding automated tests to ensure your code behaves as expected. This is particularly important when your application goes into production.
+
+
+12) count the tokens in the process to be sure! chunking is not doing exact splits! check out here: https://www.youtube.com/watch?v=au2WVVGUvc8
