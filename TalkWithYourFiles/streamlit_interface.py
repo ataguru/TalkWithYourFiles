@@ -65,14 +65,16 @@ def main():
         top_related_chunks_param_dict = param_controller.get_parameter('top_related_chunks')
         # model name from OpenAI
         model_name_param_dict = param_controller.get_parameter('model_name') 
-
-
+        # max model tokens
+        max_model_tokens_param_dict = param_controller.get_parameter('max_model_tokens')
+        # max chain response tokens
+        max_chain_response_tokens_param_dict = param_controller.get_parameter('max_chain_response_tokens')
 
 
         ### GUI
         ## columns to configure parameters in the GUI
         col1, col2, col3 = st.columns(3)
-        
+
         ## Text processing parameters
         with col1:
             chunk_size_GUI = st.slider("Chunk Size", 
@@ -95,6 +97,23 @@ def main():
                                         value=top_related_chunks_param_dict['value']                                   
                                         )
 
+        col4, col5 = st.columns(2)
+
+        with col4:
+            max_model_tokens_GUI = st.slider("Max Model Tokens", 
+                                             min_value=max_model_tokens_param_dict['min'], 
+                                             max_value=max_model_tokens_param_dict['max'], 
+                                             value=max_model_tokens_param_dict['value']
+                                             )
+
+        with col5:
+            max_chain_response_tokens_GUI = st.slider("Max Chain Response Tokens",
+                                                      min_value=max_chain_response_tokens_param_dict['min'],
+                                                      max_value=max_chain_response_tokens_param_dict['max'],
+                                                      value=max_chain_response_tokens_param_dict['value']                                   
+                                                      )
+
+        # col6  
 
         model_name_GUI = st.selectbox('Select a Model:', model_name_param_dict['model_list'])
 
@@ -104,7 +123,8 @@ def main():
         param_controller.set_parameter('chunk_overlap', chunk_overlap_GUI)
         param_controller.set_parameter('top_related_chunks', top_related_chunks_GUI)
         param_controller.set_parameter('model_name', model_name_GUI)
-        
+        param_controller.set_parameter('max_model_tokens', max_model_tokens_GUI)
+        param_controller.set_parameter('max_chain_response_tokens', max_chain_response_tokens_GUI)    
 
     ### TEST AREA END ###
 

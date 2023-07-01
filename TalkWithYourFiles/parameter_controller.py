@@ -29,12 +29,14 @@ class ParameterController:
         self.register_parameter('chunk_size', int, 1000, 'Chunk size for text splitting', min=200, max=2000)
         self.register_parameter('chunk_overlap', int, 100,"Chunk overlap for wider context", min=0, max=800)
         self.register_parameter('top_related_chunks', int, 3, 'Amount of chunks to retrieve among the most related ones', min=1, max=30)
+        self.register_parameter('max_model_tokens', int, 4096, 'Maximum tokens for the model', min=1, max=16000)
+        self.register_parameter('max_chain_response_tokens', int, 100, 'Maximum tokens for the chain response', min=1, max=16000)
         self.register_parameter('model_name', 
                                 str, 
                                 "text-davinci-003", 
                                 "Model to be used in the qa_chain", 
                                 model_list=['text-davinci-003', 
                                             'gpt-3.5-turbo']
-                                )   
+                                )
 
 

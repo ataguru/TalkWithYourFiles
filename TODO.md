@@ -49,3 +49,8 @@ Consider adding automated tests to ensure your code behaves as expected. This is
 
 
 12) count the tokens in the process to be sure! chunking is not doing exact splits! check out here: https://www.youtube.com/watch?v=au2WVVGUvc8
+
+
+
+
+NOTE: flow_coordinator only initilasied right before the chian is going to run.

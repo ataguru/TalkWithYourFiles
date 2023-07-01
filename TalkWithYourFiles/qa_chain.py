@@ -37,9 +37,23 @@ class QAChainRunner:
         self.llm = None
 
     def setup(self):
-        self.model_name = self.param_controller.get_parameter('model_name')['value']
+ 
+        # to be used in the get_relative_chunks function
         self.top_related_chunks = self.param_controller.get_parameter('top_related_chunks')['value']
-        self.llm = OpenAI(model_name=self.model_name)
+        
+        # to be used when initialising the model.
+        self.model_name = self.param_controller.get_parameter('model_name')['value']
+        self.max_model_tokens = self.param_controller.get_parameter('max_model_tokens')['value']
+    
+        # initialise the model
+        self.llm = OpenAI(
+                        model_name=self.model_name,
+                        max_tokens=self.max_model_tokens
+                        )
+
+        # to be used with chain specific params
+        self.max_chain_response_tokens = self.param_controller.get_parameter('max_chain_response_tokens')['value']
+
 
     def get_relative_chunks(self, knowledge_base, user_question):
         """Find the chunks in the knowledge base that are most relevant to the user's question.
@@ -53,7 +67,10 @@ class QAChainRunner:
 
         """
         try:
-            return knowledge_base.similarity_search(user_question, k=self.top_related_chunks)
+            return knowledge_base.similarity_search(
+                                                    user_question, 
+                                                    k=self.top_related_chunks
+                                                    )
         except Exception as e:
             print(f"Error finding relative chunks: {e}")
             return []
@@ -70,9 +87,17 @@ class QAChainRunner:
 
         """
         try:
-            chain = load_qa_chain(self.llm, chain_type="stuff")
+            chain = load_qa_chain(
+                                self.llm, 
+                                chain_type="stuff"
+                                ) 
             with get_openai_callback() as callback:
-                response = chain.run(input_documents=docs, question=user_question)
+                response = chain.run(
+                                    input_documents=docs, 
+                                    question=user_question,
+                                    max_tokens=self.max_chain_response_tokens
+                                    )
+
                 print(callback)
                 print(self.llm)
             return response
