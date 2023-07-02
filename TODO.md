@@ -6,6 +6,7 @@
  
 
 
+
 6) are there ways to incorporate something like a debug mode to test & work on the new changes on my app? I can create a new branch in git, but still, what are some other options?
 
 
@@ -37,3 +38,4 @@ Consider adding automated tests to ensure your code behaves as expected. This is
 
 
 NOTE: flow_coordinator only initilasied right before the chian is going to run.
+
