@@ -43,16 +43,16 @@ class QAChainRunner:
         
         # to be used when initialising the model.
         self.model_name = self.param_controller.get_parameter('model_name')['value']
-        self.max_model_tokens = self.param_controller.get_parameter('max_model_tokens')['value']
+        self.requested_max_model_tokens = self.param_controller.get_parameter('requested_max_model_tokens')['value']
     
         # initialise the model
         self.llm = OpenAI(
                         model_name=self.model_name,
-                        max_tokens=self.max_model_tokens
+                        max_tokens=self.requested_max_model_tokens
                         )
 
         # to be used with chain specific params
-        self.max_chain_response_tokens = self.param_controller.get_parameter('max_chain_response_tokens')['value']
+        self.displayed_max_response_tokens = self.param_controller.get_parameter('displayed_max_response_tokens')['value']
 
 
     def get_relative_chunks(self, knowledge_base, user_question):
@@ -95,7 +95,7 @@ class QAChainRunner:
                 response = chain.run(
                                     input_documents=docs, 
                                     question=user_question,
-                                    max_tokens=self.max_chain_response_tokens
+                                    max_tokens=self.displayed_max_response_tokens
                                     )
 
                 print(callback)
