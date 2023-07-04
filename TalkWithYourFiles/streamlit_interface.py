@@ -75,11 +75,6 @@ def main():
 
 
 
-
-
-
-
-
 def advanced_parameters_section(param_controller):
     ## Get the default parameters and store to use later on
     # chunk size
