@@ -4,7 +4,7 @@ from file_handlers import FileHandlerFactory
 from text_processor import DefaultTextProcessor
 from qa_chain import QAChainRunner
 from parameter_controller import ParameterController
-
+from typing import List, Optional, Tuple, Dict, IO
 
 """
 This file, flow_coordinator.py, serves as a central coordination module within the application. It acts as a bridge between user interface & underlying functionalities of other modules.
@@ -36,7 +36,7 @@ The main function in this file is the run() function, which takes the uploaded f
 
 
 class FlowCoordinator:
-    def __init__(self, param_controller):
+    def __init__(self, param_controller: ParameterController) -> None:
         """Constructor for FlowCoordinator"""
         self.param_controller = param_controller
         
@@ -48,7 +48,7 @@ class FlowCoordinator:
         self.runner = QAChainRunner(param_controller)
         self.runner.setup()
 
-    def run(self, files, user_question):
+    def run(self, files: List[IO], user_question: str) -> str:
         """Main function to process uploaded files and user's question, and run the QA chain.
         Args:
             files: List of uploaded files.
@@ -57,41 +57,46 @@ class FlowCoordinator:
             str: The response from the QA chain runner.
         """
 
-        ## VERIFY AND CONTROL THE LENGTH OF THE FILES
+        ## VERIFY THE INPUT BEFORE STARTING WITH THE REST
+        is_valid, error_message = self.validate_input(files, user_question)
+        if not is_valid:
+            return error_message
+
+        ## READ THE FILES > COMBINED TEXT
+        combined_text = self.read_files(files)
+        if combined_text is None:
+            return "No text could be extracted from the provided files. Please try again with different files."
+
+        ## CREATE CHUNKS FROM THE COMBINED TEXT
+        chunks = self.chunk_text(combined_text)
+        if chunks is None:
+            return "Couldn't split the text into chunks. Please try again with different text."
+
+        ## CREATE EMBEDDINGS FOR THE CHUNKS
+        knowledge_base = self.create_embeddings(chunks)
+        if knowledge_base is None:
+            return "Couldn't create embeddings from the text. Please try again."
+
+        ## RATE AND RETRIEVE THE MOST RELATED CHUNKS
+        relevant_chunks = self.rate_and_retrieve_chunks(knowledge_base, user_question)
+        if relevant_chunks is None:
+            return "Couldn't find any relevant chunks for your question. Please try asking a different question."
+
+        ## RUN THE QA CHAIN WITH THE CHUNKS & THE USER QUESTION
+        return self.run_qa_chain(relevant_chunks, user_question)
+
+
+    def validate_input(self, files: List[IO], user_question: str) -> Tuple[bool, str]:
         if files and len(files) > 3:
             logging.warning("Please upload a maximum of 3 files")
-            return "Please upload a maximum of 3 files"
-
-        ## VERIFY THE ARGUMENTS AND START THE PROCESS
-        if user_question and files:
-
-            ## READ THE FILES > COMBINED TEXT
-            combined_text = self.read_files(files)
-            if combined_text is None:
-                return "No text could be extracted from the provided files. Please try again with different files."
-
-            ## CREATE CHUNKS FROM THE COMBINED TEXT
-            chunks = self.chunk_text(combined_text)
-            if chunks is None:
-                return "Couldn't split the text into chunks. Please try again with different text."
-
-            ## CREATE EMBEDDINGS FOR THE CHUNKS
-            knowledge_base = self.create_embeddings(chunks)
-            if knowledge_base is None:
-                return "Couldn't create embeddings from the text. Please try again."
-
-            ## RATE AND RETRIEVE THE MOST RELATED CHUNKS
-            relevant_chunks = self.rate_and_retrieve_chunks(knowledge_base, user_question)
-            if relevant_chunks is None:
-                return "Couldn't find any relevant chunks for your question. Please try asking a different question."
-
-            ## RUN THE QA CHAIN WITH THE CHUNKS & THE USER QUESTION
-            return self.run_qa_chain(relevant_chunks, user_question)
+            return False, "Please upload a maximum of 3 files"
+        if not user_question or not files:
+            logging.warning("Both files and user question are required.")
+            return False, "Both files and user question are required."
+        return True, ""
 
 
-
-
-    def read_files(self, files):
+    def read_files(self, files: List[IO]) -> Optional[str]:
         """
         Reads the files and returns the combined text.
         """
@@ -107,7 +112,7 @@ class FlowCoordinator:
                     combined_text += text
         return combined_text
 
-    def chunk_text(self, combined_text):
+    def chunk_text(self, combined_text: str) -> Optional[List[str]]:
         """
         Takes a combined text and chunks it.
         """
@@ -117,7 +122,7 @@ class FlowCoordinator:
             return None
         return chunks
 
-    def create_embeddings(self, chunks):
+    def create_embeddings(self, chunks: List[str]) -> Optional[Dict]:
         """
         Takes chunks and creates embeddings in a knowledge base.
         """
@@ -128,7 +133,7 @@ class FlowCoordinator:
         return knowledge_base
 
 
-    def rate_and_retrieve_chunks(self, knowledge_base, user_question):
+    def rate_and_retrieve_chunks(self, knowledge_base: Dict, user_question: str) -> Optional[List[str]]:
         """
         Rates and retrieves the most relevant chunks for the user's question.
         """
@@ -139,7 +144,7 @@ class FlowCoordinator:
         return relevant_chunks
 
 
-    def run_qa_chain(self, relevant_chunks, user_question):
+    def run_qa_chain(self, relevant_chunks: List[str], user_question: str) -> str:
         """
         Runs the QA chain on the provided documents and user's question.
         """
