@@ -43,7 +43,10 @@ def main():
     st.sidebar.write("Hello and welcome! I hope this helps you! <3")
 
     ##### FILE UPLOADS
-    files = st.file_uploader("Upload files", type=["pdf", "docx", "txt","csv"], accept_multiple_files=True)
+    files = st.file_uploader("Upload files", 
+                             type=["pdf", "docx", "txt","csv"], 
+                             accept_multiple_files=True
+                             )
 
 
 
@@ -68,78 +71,50 @@ def main():
         response = flow_coordinator.run(files, user_question)
         st.write(response)
 
-
-
-
-
-
-
+    ## for testing purposes - to see the params in the UI as I change them.
+    st.write(param_controller.parameters)
 
 def advanced_parameters_section(param_controller):
-    ## Get the default parameters and store to use later on
-    # chunk size
-    chunk_size_param_dict = param_controller.get_parameter('chunk_size')
-    # chunk overlap
-    chunk_overlap_param_dict = param_controller.get_parameter('chunk_overlap')
-    # top related chunks / chunks to retrieve
-    top_related_chunks_param_dict = param_controller.get_parameter('top_related_chunks')
-    # model name from OpenAI
-    model_name_param_dict = param_controller.get_parameter('model_name') 
-    # max model tokens
-    requested_max_model_tokens_param_dict = param_controller.get_parameter('requested_max_model_tokens')
+    ## Initialize empty param_dicts store & return values from create_slider_with_param_controller function
+    param_dicts = {}
 
 
     #### TOP ROW TO SHOW AND ALLOW DYNAMIC PARAMETERS
+
     ## 4 columns to configure text processing parameters in the GUI
     column_chunk_size, column_chunk_overlap, column_top_related_chunks, column_requested_max_model_tokens = st.columns(4)
 
-    
-    ## Chunk size column slider
     with column_chunk_size:
-        chunk_size_GUI = st.slider("Chunk Size", 
-                                    min_value=chunk_size_param_dict['min'], 
-                                    max_value=chunk_size_param_dict['max'], 
-                                    value=chunk_size_param_dict['value']
-                                    )
+        param_dicts["chunk_size"] = create_slider_with_param_controller(param_controller, "chunk_size", "Chunk Size")
 
-    ## Chunk overlap column slider
     with column_chunk_overlap:
-        chunk_overlap_GUI = st.slider("Chunk Overlap",
-                                    min_value=chunk_overlap_param_dict['min'], 
-                                    max_value=chunk_overlap_param_dict['max'], 
-                                    value=chunk_overlap_param_dict['value']
-                                    )
+        param_dicts["chunk_overlap"] = create_slider_with_param_controller(param_controller, "chunk_overlap", "Chunk Overlap")
 
-    ## Top related chunks column slider        
     with column_top_related_chunks:
-        top_related_chunks_GUI = st.slider("Top Chunks To Retrieve",
-                                    min_value=top_related_chunks_param_dict['min'],
-                                    max_value=top_related_chunks_param_dict['max'],
-                                    value=top_related_chunks_param_dict['value']                                   
-                                    )
+        param_dicts["top_related_chunks"] = create_slider_with_param_controller(param_controller, "top_related_chunks", "Top Related Chunks to Retrieve")
 
-    ## Max requested tokens column slider
     with column_requested_max_model_tokens:
-        requested_max_model_tokens_GUI = st.slider("Max Tokens To Request", 
-                                            min_value=requested_max_model_tokens_param_dict['min'], 
-                                            max_value=requested_max_model_tokens_param_dict['max'], 
-                                            value=requested_max_model_tokens_param_dict['value']
-                                            )
-
-
+        param_dicts["requested_max_model_tokens"] = create_slider_with_param_controller(param_controller, "requested_max_model_tokens", "Max Requested Tokens for Completion")
 
 
 
     ##### SECOND ROW TO CONFIGURE MODEL DETAILS AND SHOW TOKEN USAGE
     column_model_name, column_model_details, columns_token_limits = st.columns(3)
 
-    ## GETTING A LIST OF MODEL NAMES TO USE IN THE SELECTBOX
-    model_names = [model['name'] for model in model_name_param_dict['model_list']]        
     
-    ## SETTING UP THE SELECTBOX FOR MODEL TO USE
+    ## Setting up the select box with the model names.
     with column_model_name:
+        ## Get model_name parameter from param_controller
+        param_dicts["model_name"] = param_controller.get_parameter("model_name")
+
+
+        ## List of model names to use in the selectbox.
+        model_names = [model['name'] for model in param_dicts["model_name"]['model_list']]       
         model_name_GUI = st.selectbox('Select a Model:', model_names)
-        selected_model_info = next((model for model in model_name_param_dict['model_list'] if model['name'] == model_name_GUI), None)
+        
+        ## Store selected model
+        #### investigate the necessity of this and maybe integrate into param_dicts
+        selected_model_info = next((model for model in param_dicts["model_name"]['model_list'] if model['name'] == model_name_GUI), None)
 
         # Display the selected model's description
         st.write(f"Description: {selected_model_info['description']}")
@@ -154,63 +129,113 @@ def advanced_parameters_section(param_controller):
 
  
     ## PROGRESS BARS TO SHOW THE TOKEN USAGE WITH CURRENT FILTERS
+
+
     with columns_token_limits:        
-        ## CONTEXT TOKENS    
-        # calculate the context length
-        context_tokens = chunk_size_GUI * top_related_chunks_GUI
+        ## Context Tokens  
+        context_tokens, context_tokens_percentage = token_calculator_context_tokens(
+                                                    param_dicts["chunk_size"], 
+                                                    param_dicts["top_related_chunks"], 
+                                                    selected_model_info["max_tokens"]
+                                                    )
+        
+        create_progress_bar(
+                            "Context Tokens",
+                            context_tokens,
+                            context_tokens_percentage
+                            )
+        
 
-        # calculate the percentage of the context tokens
-        percentage = context_tokens / selected_model_info["max_tokens"]
+        ## Completion Tokens
+        completion_tokens, completion_tokens_percentage = token_calculator_completion_tokens(
+                                                            param_dicts["requested_max_model_tokens"],
+                                                            selected_model_info["max_tokens"]
+                                                            )
         
-        st.write(f"Context tokens: {context_tokens} tokens")
-        try:
-            st.progress(percentage)
-        except:
-            st.progress(100)
-        
-        ## COMPLETION TOKENS
-        # calculate the completion tokens
-        completion_tokens = requested_max_model_tokens_GUI
-        
-        # calculate the percentage of the completion tokens
-        completion_tokens_percentage = completion_tokens / selected_model_info["max_tokens"]
+        create_progress_bar(
+                            "Completion Tokens",
+                            completion_tokens,
+                            completion_tokens_percentage
+                            )
 
-        st.write(f"Completion tokens: {completion_tokens} tokens")
-        try:
-            st.progress(completion_tokens_percentage)
-        except:
-            st.progress(100)
+        ## Question Tokens
+        question_tokens, question_tokens_percentage = token_calculator_question_tokens(
+                                                                                    completion_tokens,
+                                                                                    context_tokens,
+                                                                                    selected_model_info["max_tokens"]
+                                                                                    )
+        create_progress_bar(
+                            "Question Tokens",
+                            question_tokens,
+                            question_tokens_percentage,
+                            reverse_limit_excess_behaviour=True
+                            ) 
 
-        ## QUESTION TOKENS
-        total_tokens_used = completion_tokens + context_tokens
-        remaining_tokens = selected_model_info["max_tokens"] - total_tokens_used
-        remaining_tokens_percentage = remaining_tokens / selected_model_info["max_tokens"]
-        
-        st.write(f"Question tokens: {remaining_tokens} tokens")
-        try:
-            st.progress(remaining_tokens_percentage)
-        except:
+
+
+
+def create_slider_with_param_controller(param_controller, param_name, slider_title):
+    param_dict = param_controller.get_parameter(param_name)
+    value = st.slider(
+        slider_title, 
+        min_value=param_dict['min'], 
+        max_value=param_dict['max'], 
+        value=param_dict['value']
+    )
+    param_controller.set_parameter(param_name, value)
+    return value
+
+def create_progress_bar(title, unit_tokens, unit_percentage, reverse_limit_excess_behaviour=False):
+    st.write(f"{title}: {unit_tokens} tokens")
+    # If user sets up unrealistic parameters.   
+    try:
+        st.progress(unit_percentage)
+    except:
+        ## the usual behaviour is the limit is exceeded and the bar is full.
+        if reverse_limit_excess_behaviour:
             st.progress(0, ":red[Limit exceeded!]")
+        else:
+            st.progress(100, ":red[Limit exceeded!]")
 
 
-    # Update the parameters in the parameter controller after the interactions with the slider.
-    update_parameters(param_controller, chunk_size_GUI, chunk_overlap_GUI, top_related_chunks_GUI, model_name_GUI, requested_max_model_tokens_GUI)
+## Token Balancer Functions
+def token_calculator_context_tokens(chunk_size, top_related_chunks_count, selected_model_max_tokens):
+    ## CONTEXT TOKENS    
+    # Context is spllitted into chunks & then top requested ones are used.
+    context_tokens = chunk_size * top_related_chunks_count 
 
+    # calculate the percentage of the context tokens
+    percentage = context_tokens / selected_model_max_tokens
 
+    return context_tokens, percentage
 
+def token_calculator_completion_tokens(requested_max_model, selected_model_max_tokens):
+    # the max limit we request from model for completion
+    completion_tokens = requested_max_model
+    completion_tokens_percentage = requested_max_model / selected_model_max_tokens
 
+    return completion_tokens, completion_tokens_percentage
 
+def token_calculator_question_tokens(completion_tokens, context_tokens, selected_model_max_tokens):
+    # remaining tokens from total used after completion & context tokens are question tokens.
+    total_tokens_used = completion_tokens + context_tokens
+    question_tokens = selected_model_max_tokens - total_tokens_used
+    question_tokens_percentage = question_tokens / selected_model_max_tokens
 
-def update_parameters(param_controller, chunk_size, chunk_overlap, top_related_chunks, model_name, requested_max_model_tokens):
-    param_controller.set_parameter('chunk_size', chunk_size)
-    param_controller.set_parameter('chunk_overlap', chunk_overlap)
-    param_controller.set_parameter('top_related_chunks', top_related_chunks)
-    param_controller.set_parameter('model_name', model_name)
-    param_controller.set_parameter('requested_max_model_tokens', requested_max_model_tokens)
+    return question_tokens, question_tokens_percentage
+
 
 #### TEST AREA START
 
 # I need functions to decrease repetition in getting parameters, creating sliders, and some other areas where possible.
+## I think continue with the second row. finish all. then come back with more general look, documentation etc.
+### also seems like model names are not getting updated anymore. might be a conflict with param_dicts
+
+
+
+
+
+
 
 #### TEST AREA END
 

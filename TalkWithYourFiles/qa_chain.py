@@ -55,6 +55,7 @@ class QAChainRunner:
         self.displayed_max_response_tokens = self.param_controller.get_parameter('displayed_max_response_tokens')['value']
 
 
+
     def get_relative_chunks(self, knowledge_base, user_question):
         """Find the chunks in the knowledge base that are most relevant to the user's question.
 
@@ -92,6 +93,7 @@ class QAChainRunner:
                                 chain_type="stuff"
                                 ) 
             with get_openai_callback() as callback:
+                print(self.llm)
                 response = chain.run(
                                     input_documents=docs, 
                                     question=user_question,
@@ -99,7 +101,6 @@ class QAChainRunner:
                                     )
 
                 print(callback)
-                print(self.llm)
             return response
         except Exception as e:
             print(f"Error running QA chain: {e}")
