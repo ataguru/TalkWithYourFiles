@@ -53,7 +53,7 @@ class QAChainRunner:
         self.llm = OpenAI(
                         model_name=self.model_name,
                         max_tokens=self.requested_max_model_tokens,
-                        openai_api_key=api_key
+                        OPENAI_API_KEY=api_key
                         )
 
         # to be used with chain specific params
