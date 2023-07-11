@@ -32,12 +32,16 @@ class QAChainRunner:
 
         """
         self.param_controller = param_controller
+
+
         self.model_name = None
         self.top_related_chunks = None
         self.llm = None
 
-    def setup(self):
- 
+    def setup(self, api_key):
+        # authorizing with openai api key
+        self.api_key = api_key
+
         # to be used in the get_relative_chunks function
         self.top_related_chunks = self.param_controller.get_parameter('top_related_chunks')['value']
         
@@ -48,7 +52,8 @@ class QAChainRunner:
         # initialise the model
         self.llm = OpenAI(
                         model_name=self.model_name,
-                        max_tokens=self.requested_max_model_tokens
+                        max_tokens=self.requested_max_model_tokens,
+                        api_key=api_key
                         )
 
         # to be used with chain specific params

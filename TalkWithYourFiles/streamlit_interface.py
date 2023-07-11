@@ -13,16 +13,18 @@ def main():
     3) Get the response by running the run(files, user_question) method with the appropriate arguments. 
     
     """
-    ### this area causes param_controller to actively integrate with the gui. do we want it?
+
+
     ## Instantiating a ParameterController instance to be used in the flow_coordinator.
     param_controller = ParameterController()
     
     ## Registering default parameters.
-    param_controller.setup_default_parameters()  
+    param_controller.setup_default_parameters()
 
-    # comment!   
-    # flow_coordinator = FlowCoordinator(param_controller)
 
+    ## Instantiating the Flow Coordinator
+    flow_coordinator = FlowCoordinator(param_controller) 
+ 
 
     ##### PAGE CONFIGURATIONS
     st.set_page_config(
@@ -43,6 +45,15 @@ def main():
     ##### SIDEBAR
     st.sidebar.header("Talk With Your Files")
     st.sidebar.write("Hello and welcome! I hope this helps you! <3")
+
+    ##### Authorization
+    default_key = flow_coordinator.authorizer.get_api_key()
+    input_api_key = st.text_input("Enter your OpenAI API key", 
+                                  value=default_key if default_key else "", 
+                                  type="password"
+                                  )
+
+
 
     ##### FILE UPLOADS
     files = st.file_uploader("Upload files", 
@@ -68,13 +79,28 @@ def main():
                                    )
 
     ##### START QA CHAIN
-    if user_question and files and run_button_clicked:
-        flow_coordinator = FlowCoordinator(param_controller)        
-        response = flow_coordinator.run(files, user_question)
+    if user_question and files and run_button_clicked:       
+        response = flow_coordinator.run(files, user_question, input_api_key)
         st.write(response)
 
     ## for testing purposes - to see the params in the UI as I change them.
     st.write(param_controller.parameters)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def advanced_parameters_section(param_controller):
     ## Initialize empty param_dicts store & return values from create_slider_with_param_controller function

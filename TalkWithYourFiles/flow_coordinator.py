@@ -1,5 +1,5 @@
 import logging
-from dotenv import load_dotenv
+from api_key_handler import ApiKeyHandler
 from file_handlers import FileHandlerFactory
 from text_processor import DefaultTextProcessor
 from qa_chain import QAChainRunner
@@ -39,16 +39,17 @@ class FlowCoordinator:
     def __init__(self, param_controller: ParameterController) -> None:
         """Constructor for FlowCoordinator"""
         self.param_controller = param_controller
-        
-        load_dotenv()
+
         logging.basicConfig(level=logging.INFO)
+
+        self.authorizer = ApiKeyHandler()
 
         self.file_factory = FileHandlerFactory()
         self.processor = DefaultTextProcessor(param_controller)
         self.runner = QAChainRunner(param_controller)
 
 
-    def run(self, files: List[IO], user_question: str) -> str:
+    def run(self, files: List[IO], user_question: str, api_key: str) -> str:
         """Main function to process uploaded files and user's question, and run the QA chain.
         Args:
             files: List of uploaded files.
@@ -58,7 +59,7 @@ class FlowCoordinator:
         """
 
         # # Set up with the configurations.
-        self.runner.setup()
+        self.runner.setup(api_key)
 
         ## VERIFY THE INPUT BEFORE STARTING WITH THE REST
         is_valid, error_message = self.validate_input(files, user_question)
