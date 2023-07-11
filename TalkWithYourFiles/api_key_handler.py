@@ -18,3 +18,7 @@ class ApiKeyHandler:
         # Otherwise, use the API key from the .env file
         else:
             return self.env_api_key
+    
+    def set_api_key_environment_variable(self, openai_api_key):
+        # Set the environment variable
+        os.environ["OPENAI_API_KEY"] = openai_api_key

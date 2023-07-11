@@ -49,7 +49,7 @@ class FlowCoordinator:
         self.runner = QAChainRunner(param_controller)
 
 
-    def run(self, files: List[IO], user_question: str, api_key: str) -> str:
+    def run(self, files: List[IO], user_question: str) -> str:
         """Main function to process uploaded files and user's question, and run the QA chain.
         Args:
             files: List of uploaded files.
@@ -59,7 +59,7 @@ class FlowCoordinator:
         """
 
         # # Set up with the configurations.
-        self.runner.setup(api_key)
+        self.runner.setup()
 
         ## VERIFY THE INPUT BEFORE STARTING WITH THE REST
         is_valid, error_message = self.validate_input(files, user_question)

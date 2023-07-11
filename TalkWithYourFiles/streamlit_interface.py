@@ -46,13 +46,14 @@ def main():
     st.sidebar.header("Talk With Your Files")
     st.sidebar.write("Hello and welcome! I hope this helps you! <3")
 
-    ##### Authorization
+    ##### Authorization & Setting up the environment variable
     default_key = flow_coordinator.authorizer.get_api_key()
     input_api_key = st.text_input("Enter your OpenAI API key", 
                                   value=default_key if default_key else "", 
                                   type="password"
                                   )
-
+    flow_coordinator.authorizer.set_api_key_environment_variable(input_api_key)
+    
 
 
     ##### FILE UPLOADS
@@ -80,7 +81,7 @@ def main():
 
     ##### START QA CHAIN
     if user_question and files and run_button_clicked:       
-        response = flow_coordinator.run(files, user_question, input_api_key)
+        response = flow_coordinator.run(files, user_question)
         st.write(response)
 
     ## for testing purposes - to see the params in the UI as I change them.
