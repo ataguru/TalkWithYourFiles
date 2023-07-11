@@ -46,25 +46,18 @@ def main():
     st.sidebar.header("Talk With Your Files")
     st.sidebar.write("Hello and welcome! I hope this helps you! <3")
 
-    authorization_column, file_upload_column = st.columns(2)
-    with authorization_column:
-        ##### Authorization & Setting up the environment variable
-        default_key = flow_coordinator.authorizer.get_api_key()
-        input_api_key = st.text_input("Enter your OpenAI API key", 
-                                    value=default_key if default_key else "", 
-                                    type="password"
-                                    )
-        flow_coordinator.authorizer.set_api_key_environment_variable(input_api_key)
-    
-
-    with file_upload_column:
-        ##### FILE UPLOADS
-        files = st.file_uploader("Upload files", 
-                                type=["pdf", "docx", "txt","csv"], 
-                                accept_multiple_files=True
-                                )
 
 
+
+
+    ##### FILE UPLOADS
+    files = st.file_uploader("Upload files", 
+                            type=["pdf", "docx", "txt","csv"], 
+                            accept_multiple_files=True
+                            )
+
+    ##### Authorization box for OpenAI API KEY
+    create_authorization_box()
 
     ##### ADVANCED PARAMETERS SECTION
     with st.expander("Show Advanced Parameters?"):
@@ -94,6 +87,33 @@ def main():
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def create_authorization_box(): 
+    ##### Authorization & Setting up the environment variable
+    default_key = flow_coordinator.authorizer.get_api_key()
+    input_api_key = st.text_input("Enter your OpenAI API key", 
+                                value=default_key if default_key else "", 
+                                type="password"
+                                )
+    flow_coordinator.authorizer.set_api_key_environment_variable(input_api_key)
 
 
 
