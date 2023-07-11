@@ -45,7 +45,9 @@ def main():
     ##### SIDEBAR
     st.sidebar.header("Talk With Your Files")
     st.sidebar.write("Hello and welcome! I hope this helps you! <3")
-
+    
+    ##### Authorization box for OpenAI API KEY
+    create_authorization_box(flow_coordinator)
 
 
 
@@ -56,8 +58,7 @@ def main():
                             accept_multiple_files=True
                             )
 
-    ##### Authorization box for OpenAI API KEY
-    create_authorization_box(flow_coordinator)
+
 
     ##### ADVANCED PARAMETERS SECTION
     with st.expander("Show Advanced Parameters?"):
@@ -109,7 +110,7 @@ def main():
 def create_authorization_box(flow_coordinator): 
     ##### Authorization & Setting up the environment variable
     default_key = flow_coordinator.authorizer.get_api_key()
-    input_api_key = st.text_input("Enter your OpenAI API key", 
+    input_api_key = st.sidebar.text_input("Enter your OpenAI API key", 
                                 value=default_key if default_key else "", 
                                 type="password"
                                 )
