@@ -13,13 +13,15 @@ def main():
     3) Get the response by running the run(files, user_question) method with the appropriate arguments. 
     
     """
-
-    ## Instantiating a ParameterController instance to be used in the flow_coordinator at the end.
+    ### this area causes param_controller to actively integrate with the gui. do we want it?
+    ## Instantiating a ParameterController instance to be used in the flow_coordinator.
     param_controller = ParameterController()
     
     ## Registering default parameters.
     param_controller.setup_default_parameters()  
 
+    # comment!   
+    # flow_coordinator = FlowCoordinator(param_controller)
 
 
     ##### PAGE CONFIGURATIONS

@@ -46,7 +46,7 @@ class FlowCoordinator:
         self.file_factory = FileHandlerFactory()
         self.processor = DefaultTextProcessor(param_controller)
         self.runner = QAChainRunner(param_controller)
-        self.runner.setup()
+
 
     def run(self, files: List[IO], user_question: str) -> str:
         """Main function to process uploaded files and user's question, and run the QA chain.
@@ -56,6 +56,9 @@ class FlowCoordinator:
         Returns:
             str: The response from the QA chain runner.
         """
+
+        # # Set up with the configurations.
+        self.runner.setup()
 
         ## VERIFY THE INPUT BEFORE STARTING WITH THE REST
         is_valid, error_message = self.validate_input(files, user_question)
@@ -84,6 +87,27 @@ class FlowCoordinator:
 
         ## RUN THE QA CHAIN WITH THE CHUNKS & THE USER QUESTION
         return self.run_qa_chain(relevant_chunks, user_question)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     def validate_input(self, files: List[IO], user_question: str) -> Tuple[bool, str]:
