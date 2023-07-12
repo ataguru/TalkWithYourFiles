@@ -1,7 +1,7 @@
 from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
-from parameter_controller import ParameterController
+
 
 """
 In this file QAChainRunner class is implemented, which is responsible for running the Question Answering (QA) chain

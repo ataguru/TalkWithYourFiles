@@ -1,10 +1,12 @@
-import logging
-from api_key_handler import ApiKeyHandler
-from file_handlers import FileHandlerFactory
-from text_processor import DefaultTextProcessor
-from qa_chain import QAChainRunner
+from backend_utils.api_key_handler import ApiKeyHandler
+from backend_utils.file_handlers import FileHandlerFactory
+from backend_utils.text_processor import DefaultTextProcessor
+from backend_utils.qa_chain import QAChainRunner
+
 from parameter_controller import ParameterController
+
 from typing import List, Optional, Tuple, Dict, IO
+import logging
 
 """
 This file, flow_coordinator.py, serves as a central coordination module within the application. It acts as a bridge between user interface & underlying functionalities of other modules.

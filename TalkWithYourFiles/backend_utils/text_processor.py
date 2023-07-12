@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
-from parameter_controller import ParameterController
+
 
 
 
