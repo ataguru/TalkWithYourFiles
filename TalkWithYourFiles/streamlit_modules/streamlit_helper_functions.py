@@ -95,7 +95,12 @@ def advanced_parameters_section(param_controller):
 
 def create_authorization_box(flow_coordinator): 
     ##### Authorization & Setting up the environment variable
-    default_key = flow_coordinator.authorizer.get_api_key()
+
+    ## causes key leak without modifying streamlit caching options.
+    ## risky gate. lets close using dotenv file?
+    # default_key = flow_coordinator.authorizer.get_api_key()
+    
+    default_key = None
     input_api_key = st.sidebar.text_input("Enter your OpenAI API key", 
                                 value=default_key if default_key else "", 
                                 type="password"
