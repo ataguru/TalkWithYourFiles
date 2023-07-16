@@ -3,6 +3,7 @@ from parameter_controller import ParameterController
 
 import streamlit as st
 from streamlit_modules.streamlit_components import *
+from streamlit_modules.streamlit_chat import main_chat
 
 
 def main():
@@ -28,8 +29,10 @@ def main():
     setup_sidebar(flow_coordinator)
 
     # Setting up each tab for the GUI
-    tab1, tab2 = st.tabs(["QA Chain", "Active Params"])
+    tab0, tab1, tab2 = st.tabs(["Chat Bot", "QA Chain", "Active Params"])
 
+    with tab0:
+        main_chat()
     with tab1:
         # Tab 1 QA Chain Over Files
         tab1_qa_chain_files(param_controller, flow_coordinator)

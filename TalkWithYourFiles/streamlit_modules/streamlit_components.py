@@ -1,5 +1,7 @@
 import streamlit as st
 from .streamlit_helper_functions import *
+from .streamlit_chat import Message
+
 
 def setup_page_configurations():
     ##### PAGE CONFIGURATIONS
@@ -74,9 +76,31 @@ def tab1_qa_chain_files(param_controller, flow_coordinator):
         response = flow_coordinator.run(files, user_question)
         st.write(response)
 
+        #### REFACTOR BELOW AREA - INTEGRATING QA CHAIN WITH THE CHATBOT
+        # Add the QA chain result to the queue
+        st.session_state.queued_messages.append({
+            'question': user_question,
+            'answer': response
+        })
 
+        # Get the first queued message
+        queued_message = st.session_state.queued_messages.pop(0)
 
+        # Create a special AI message for it
+        ai_message = f"Here're the result of your QA Chain usage, let's look at it together:\n\nquestion: {queued_message['question']}\nanswer: {queued_message['answer']}"
 
+        # Save context to the conversation memory
+        st.session_state.conversation.memory.save_context(
+            {"input": queued_message['question']}, 
+            {"output": queued_message['answer']}
+        )
+
+        # Display AI's message
+        st.session_state.history.append(Message("ai", ai_message))
+
+        # Use this to force rerun 
+        ### causes the qa chain tab to not show the answer.
+        st.experimental_rerun()
 
 def tab2_active_params(param_controller):
     ## for testing purposes - to see the params in the UI as I change them.
@@ -85,6 +109,7 @@ def tab2_active_params(param_controller):
 
 
 
-
+# def tab0_chat_bot():
+#     pass
 
 
