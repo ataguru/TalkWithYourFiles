@@ -1,6 +1,7 @@
 import streamlit as st
-from .streamlit_helper_functions import *
-from .streamlit_chat import Message
+from .streamlit_helper_functions import advanced_parameters_section, create_authorization_box, authorization_status_box
+from .streamlit_chat import integrate_chain_into_chat
+
 
 
 def setup_page_configurations():
@@ -9,7 +10,7 @@ def setup_page_configurations():
                     page_title="Talk With Your Files",
                     page_icon="random",
                     layout="wide", # centered or wide
-                    initial_sidebar_state="collapsed", #auto, expanded, collapsed
+                    initial_sidebar_state="expanded", #auto, expanded, collapsed
                     menu_items={
                         'Get Help': 'https://github.com/Safakan',
                         'Report a bug': "https://github.com/Safakan/TalkWithYourFiles-LLM-GUI",
@@ -30,7 +31,6 @@ def setup_sidebar(flow_coordinator):
     
     ##### Authorization box for OpenAI API KEY
     create_authorization_box(flow_coordinator)
-
 
 
 
@@ -56,51 +56,45 @@ def tab1_qa_chain_files(param_controller, flow_coordinator):
 
 
 
+    
+
     ##### ADVANCED PARAMETERS SECTION
     with st.expander("Show Advanced Parameters?"):
         advanced_parameters_section(param_controller)
 
 
 
+
     ##### USER QUESTION INPUT
-    user_question = st.text_input("Please ask me about your uploaded files and I shall help you: ")
+    user_question = st.text_input("Please ask question(s) about the files you've uploaded: ")
+    
 
+    ###### To run the chain & shape the behaviour
+    run_button_col, integration_button_col = st.columns([4,1])
+    with run_button_col:
+        ##### QA CHAIN RUN BUTTON
+        run_button_clicked = st.button("Run",
+                                    use_container_width=True,
+                                    type="primary"                                   
+                                    )
+    
+    with integration_button_col:
+        ###### QA Chain Behaviour
+        transfer_to_chat_bot = st.selectbox(
+                                            label="Test",
+                                            label_visibility="collapsed", 
+                                            options=["Standalone","Integrated into the chatbot"]
+                                            )
 
-    ##### QA CHAIN RUN BUTTON
-    run_button_clicked = st.button("Run",
-                                   use_container_width=True                                   
-                                   )
 
     ##### START QA CHAIN
-    if user_question and files and run_button_clicked:       
+    if user_question and files and run_button_clicked and st.session_state.api_key_valid:       
         response = flow_coordinator.run(files, user_question)
         st.write(response)
 
-        #### REFACTOR BELOW AREA - INTEGRATING QA CHAIN WITH THE CHATBOT
-        # Add the QA chain result to the queue
-        st.session_state.queued_messages.append({
-            'question': user_question,
-            'answer': response
-        })
+        if transfer_to_chat_bot != "Standalone":
+            integrate_chain_into_chat(user_question, response)
 
-        # Get the first queued message
-        queued_message = st.session_state.queued_messages.pop(0)
-
-        # Create a special AI message for it
-        ai_message = f"Here're the result of your QA Chain usage, let's look at it together:\n\nquestion: {queued_message['question']}\nanswer: {queued_message['answer']}"
-
-        # Save context to the conversation memory
-        st.session_state.conversation.memory.save_context(
-            {"input": queued_message['question']}, 
-            {"output": queued_message['answer']}
-        )
-
-        # Display AI's message
-        st.session_state.history.append(Message("ai", ai_message))
-
-        # Use this to force rerun 
-        ### causes the qa chain tab to not show the answer.
-        st.experimental_rerun()
 
 def tab2_active_params(param_controller):
     ## for testing purposes - to see the params in the UI as I change them.
@@ -109,7 +103,5 @@ def tab2_active_params(param_controller):
 
 
 
-# def tab0_chat_bot():
-#     pass
 
 

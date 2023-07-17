@@ -31,6 +31,7 @@ def main():
     # Setting up each tab for the GUI
     tab0, tab1, tab2 = st.tabs(["Chat Bot", "QA Chain", "Active Params"])
 
+
     with tab0:
         main_chat()
     with tab1:

@@ -1,6 +1,10 @@
 import streamlit as st
 
-
+##########################################################
+##########################################################
+### QA CHAIN
+##########################################################
+##########################################################
 
 def advanced_parameters_section(param_controller):
     #### TOP ROW TO SHOW AND ALLOW DYNAMIC PARAMETERS
@@ -91,19 +95,47 @@ def advanced_parameters_section(param_controller):
 
 
 
-
-
 def create_authorization_box(flow_coordinator): 
     ##### Authorization & Setting up the environment variable
-
-
+    if "api_key" not in st.session_state:
+        st.session_state.api_key = None
+    if "api_key_valid" not in st.session_state:
+        st.session_state.api_key_valid = None
+    
     input_api_key = st.sidebar.text_input(
         "Enter your OpenAI API key", 
-        value="", 
-        type="password"
+        type="password",
     )
-    flow_coordinator.authorizer.set_api_key_environment_variable(input_api_key)
 
+    if input_api_key:
+        st.session_state.api_key = input_api_key
+        st.session_state.api_key_valid = flow_coordinator.authorizer.validate_key(st.session_state.api_key)
+        flow_coordinator.authorizer.set_api_key_environment_variable(st.session_state.api_key)    
+
+    authorization_status_box(st.session_state.api_key_valid)
+
+        
+
+
+def authorization_status_box(isvalid):
+    """Creates a green or red box depending on the value of the `isvalid` variable."""
+    if isvalid:
+        color = "green"
+        text = "Validated"
+    else:
+        color = "darkred"
+        text = "Not Validated"
+    style = f"""
+    .{color}-box {{
+        background-color: {color};
+        border: 1px solid black;
+        padding: 10px;
+    }}
+    """
+    st.sidebar.markdown(f"""
+    <style>{style}</style>
+    <div class="{color}-box">{text}</div>
+    """, unsafe_allow_html=True)
 
 
 def create_slider_with_param_controller(param_controller, param_name, slider_title):
@@ -148,8 +180,11 @@ def create_drop_down_with_param_controller(param_controller, param_name, drop_do
 
 
 
-
-
+##########################################################
+##########################################################
+### FOR TOKEN CALCULATIONS
+##########################################################
+##########################################################
 
 
 ##### these will be moved to the token balancer class
@@ -180,3 +215,9 @@ def token_calculator_question_tokens(completion_tokens, context_tokens, selected
     return question_tokens, question_tokens_percentage
 
 
+
+##########################################################
+##########################################################
+### Chatbot
+##########################################################
+##########################################################
