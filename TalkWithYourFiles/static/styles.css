@@ -17,12 +17,12 @@
 }
 
 .ai-bubble {
-    background: rgb(229, 16, 211);
+    background: rgb(224, 21, 207);
     border-radius: 10px;
 }
 
 .human-bubble {
-    background: linear-gradient(135deg, rgb(255, 196, 0) 0%, rgb(141, 168, 22) 100%); 
+    background: linear-gradient(135deg, rgb(224, 59, 59) 0%, rgb(10, 72, 157) 100%); 
     color: white;
     border-radius: 20px;
 }

@@ -1,6 +1,16 @@
 import streamlit as st
 
+# to be refactored:
+# 1- seperate sections for each use key, if extends too much consider sub directories
+# 2- tokenbalancer to its own module 
+# 3- integrate param controller to chatbot
 
+
+##########################################################
+##########################################################
+### QA CHAIN
+##########################################################
+##########################################################
 
 def advanced_parameters_section(param_controller):
     #### TOP ROW TO SHOW AND ALLOW DYNAMIC PARAMETERS
@@ -91,22 +101,47 @@ def advanced_parameters_section(param_controller):
 
 
 
-
-
 def create_authorization_box(flow_coordinator): 
     ##### Authorization & Setting up the environment variable
-
-    ## causes key leak without modifying streamlit caching options.
-    ## risky gate. lets close using dotenv file?
-    # default_key = flow_coordinator.authorizer.get_api_key()
+    if "api_key" not in st.session_state:
+        st.session_state.api_key = None
+    if "api_key_valid" not in st.session_state:
+        st.session_state.api_key_valid = None
     
-    default_key = None
-    input_api_key = st.sidebar.text_input("Enter your OpenAI API key", 
-                                value=default_key if default_key else "", 
-                                type="password"
-                                )
-    flow_coordinator.authorizer.set_api_key_environment_variable(input_api_key)
+    input_api_key = st.sidebar.text_input(
+        "Enter your OpenAI API key", 
+        type="password",
+    )
 
+    if input_api_key:
+        st.session_state.api_key = input_api_key
+        st.session_state.api_key_valid = flow_coordinator.authorizer.validate_key(st.session_state.api_key)
+        flow_coordinator.authorizer.set_api_key_environment_variable(st.session_state.api_key)    
+
+    authorization_status_box(st.session_state.api_key_valid)
+
+        
+
+### only a helper function to create_authorization_box.
+def authorization_status_box(isvalid):
+    """Creates a green or red box depending on the value of the `isvalid` variable."""
+    if isvalid:
+        color = "green"
+        text = "Validated"
+    else:
+        color = "darkred"
+        text = "Not Validated"
+    style = f"""
+    .{color}-box {{
+        background-color: {color};
+        border: 1px solid black;
+        padding: 10px;
+    }}
+    """
+    st.sidebar.markdown(f"""
+    <style>{style}</style>
+    <div class="{color}-box">{text}</div>
+    """, unsafe_allow_html=True)
 
 
 def create_slider_with_param_controller(param_controller, param_name, slider_title):
@@ -151,8 +186,11 @@ def create_drop_down_with_param_controller(param_controller, param_name, drop_do
 
 
 
-
-
+##########################################################
+##########################################################
+### FOR TOKEN CALCULATIONS
+##########################################################
+##########################################################
 
 
 ##### these will be moved to the token balancer class
@@ -183,3 +221,43 @@ def token_calculator_question_tokens(completion_tokens, context_tokens, selected
     return question_tokens, question_tokens_percentage
 
 
+
+##########################################################
+##########################################################
+### Chatbot   ---- to be refactored
+########################################################## 
+##########################################################
+def get_chat_bot_info_dict():
+    chat_bot_info_dict = {
+                        "model": "text-davinci-003", 
+                        "type": "llm", 
+                        "description": "Can do any language task with better quality, longer output, and consistent instruction-following than the curie, babbage, or ada models. Also supports some additional features such as inserting text.",
+                        "prompt": """
+                            The following is a friendly conversation between a human and an AI.\n
+                            The AI is in the form of llm chatbot in an application called Talk With Your Files. \n
+                            AI is talkative & fun. \n
+                            AI has already introduced itself with a default message. And does not greet and explains its purpose unless it's prompted.     
+                            AI does not make any assumptions around this app. \n 
+                            If the AI does not know the answer to a question, it truthfully says it does not know. \n
+                            If questions have no clear answers redirect user to check out the documentations. \n
+                            If the questions are not specific to this application, AI can be creative and use its own knowledge  \n
+                            
+                            REMEMBER: AI is there to help with all appropriate questions of users, not just the files. Provide higher level guidance with abstraction and \n
+                            fun & creative.
+
+                            This application's capabilities: \n
+                            1) Talk with AI chat bot (this one), \n 
+                            2) Run a question answer chain over documents to answer users questions over uploaded files. \n
+                            2.1) Modify the qa chain behaviour with dynamic parameters visible on GUI  \n
+                            2.2) Choose to use qa chain standalone or by integrating the results into the chatbot conversation. \n
+                            3) Monitor active parameters that're in use.
+
+                            documentation: https://github.com/Safakan/TalkWithYourFiles \n
+
+                            Current conversation: {history} \n    
+                            Human: {input} \n
+                            AI Assistant:    
+                            """
+                 
+                        }
+    return chat_bot_info_dict

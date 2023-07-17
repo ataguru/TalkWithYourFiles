@@ -7,6 +7,7 @@ from parameter_controller import ParameterController
 
 from typing import List, Optional, Tuple, Dict, IO
 import logging
+from pydantic.error_wrappers import ValidationError
 
 """
 This file, flow_coordinator.py, serves as a central coordination module within the application. It acts as a bridge between user interface & underlying functionalities of other modules.
@@ -60,9 +61,13 @@ class FlowCoordinator:
             str: The response from the QA chain runner.
         """
 
-        # # Set up with the configurations.
-        self.runner.setup()
-
+        ## Set up with the configurations.
+        ## consider removing the validation since we have the initial layer of validation.
+        try:
+            self.runner.setup()
+        except ValidationError as ve:
+            return "Invalid or missing API key. Please ensure you have entered a valid OpenAI API key."
+      
         ## VERIFY THE INPUT BEFORE STARTING WITH THE REST
         is_valid, error_message = self.validate_input(files, user_question)
         if not is_valid:
