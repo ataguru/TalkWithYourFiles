@@ -1,5 +1,5 @@
 import streamlit as st
-from .streamlit_helper_functions import advanced_parameters_section, create_authorization_box, authorization_status_box
+from .streamlit_helper_functions import advanced_parameters_section, create_authorization_box, get_chat_bot_info_dict
 from .streamlit_chat import integrate_chain_into_chat
 
 
@@ -21,8 +21,7 @@ def setup_page_configurations():
 
 def setup_header_area():
     ##### HEADER
-    st.header("Talk With Your Files")
-
+    st.title("Talk With Your Files 🪄 ")
 
 def setup_sidebar(flow_coordinator):
     ##### SIDEBAR
@@ -98,7 +97,22 @@ def tab1_qa_chain_files(param_controller, flow_coordinator):
 
 def tab2_active_params(param_controller):
     ## for testing purposes - to see the params in the UI as I change them.
-    st.write(param_controller.parameters)
+
+    # tab_chat_bot_params, tab_qa_chain_params = st.tabs(["Chat Bot", "QA Chain"])
+    tab_chat_bot_params, tab_qa_chain_params = st.columns(2)
+
+    with tab_chat_bot_params:
+        st.write("""
+                Chat Bot   
+                """
+                )
+        st.write(get_chat_bot_info_dict())
+    with tab_qa_chain_params:
+        st.write("""
+                QA Chain
+                """
+                )
+        st.write(param_controller.parameters)
 
 
 

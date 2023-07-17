@@ -61,7 +61,8 @@ class FlowCoordinator:
             str: The response from the QA chain runner.
         """
 
-        # # Set up with the configurations.
+        ## Set up with the configurations.
+        ## consider removing the validation since we have the initial layer of validation.
         try:
             self.runner.setup()
         except ValidationError as ve:

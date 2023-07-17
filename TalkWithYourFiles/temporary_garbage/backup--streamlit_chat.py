@@ -12,40 +12,22 @@ import streamlit.components.v1 as components
 from pydantic.error_wrappers import ValidationError
 
 
-
+# for prompt
 from langchain.prompts.prompt import PromptTemplate
-
-
-## REFACTORING AND CONNECTING TO FLOWCOORDINATOR
-## Store params in param_controller
-## maybe shape the param_controller or sub types of param_controllers?
-
-
 
 def get_ai_prompt_chat_bot():
     template = """
     The following is a friendly conversation between a human and an AI.\n
-    The AI is in the form of llm chatbot in an application called Talk With Your Files. \n
-    AI is talkative & fun. \n
-    AI has already introduced itself with a default message. And does not greet and explains its purpose unless it's prompted.     
-    AI does not make any assumptions around this app. \n 
+    The AI is in the form of chatbot in an application called Talk With Your Files. \n
+    AI is talkative & fun, already introduced itself with a default message. And does not greet anymore. \n
+    AI is aware of this app's capabilities, and will not make assumptions around this app. \n 
     If the AI does not know the answer to a question, it truthfully says it does not know. \n
-    If questions have no clear answers redirect user to check out the documentations. \n
-    If the questions are not specific to this application, AI can be creative and use its own knowledge  \n
+    And suggest people to check out the sources like github etc.
     
-    REMEMBER: AI is there to help with all appropriate questions of users, not just the files. Provide higher level guidance with abstraction and \n
-    fun & creative.
+    The apps's capabilities:
+    Talk with AI chat bot, run a question answer chain over documents to question user's documents with dynamic parameters integrated into the GUI.
 
-    This application's capabilities: \n
-    1) Talk with AI chat bot (this one), \n 
-    2) Run a question answer chain over documents to answer users questions over uploaded files. \n
-    2.1) Modify the qa chain behaviour with dynamic parameters visible on GUI  \n
-    2.2) Choose to use qa chain standalone or by integrating the results into the chatbot conversation. \n
-    3) Monitor active parameters that're in use.
-
-    documentation: https://github.com/Safakan/TalkWithYourFiles \n
-
-    Current conversation: {history} \n    
+    Current conversation: {history} \n
     Human: {input} \n
     AI Assistant:    
     """
@@ -80,7 +62,7 @@ def initialize_session_state():
     if "conversation" not in st.session_state:
         if st.session_state.api_key_valid:
             llm = OpenAI(
-                temperature=0.4,
+                temperature=0,
                 model_name="text-davinci-003"
             )
             st.session_state.conversation = ConversationChain(
@@ -118,6 +100,8 @@ def main_chat():
 
     ########### start gui
 
+    st.title("Hello Custom CSS Chatbot 🤖")
+
     chat_placeholder = st.container()
     prompt_placeholder = st.form("chat-form")
     credit_card_placeholder = st.empty()
@@ -143,7 +127,7 @@ def main_chat():
             st.markdown("")
 
     with prompt_placeholder:
-        st.markdown("Prompt:")
+        st.markdown("**Chat**")
         cols = st.columns((6, 1))
         cols[0].text_input(
             "Chat",
@@ -175,12 +159,12 @@ def main_chat():
         el => el.innerText === 'Submit'
     );
 
-    //streamlitDoc.addEventListener('keydown', function(e) {
-    //    switch (e.key) {
-    //        case 'Enter':
-    //            submitButton.click();
-    //          break;
-    //   }
+    streamlitDoc.addEventListener('keydown', function(e) {
+        switch (e.key) {
+            case 'Enter':
+                submitButton.click();
+                break;
+        }
     });
     </script>
     """, 
@@ -204,7 +188,7 @@ def integrate_chain_into_chat(user_question, response):
         queued_message = st.session_state.queued_messages.pop(0)
 
         # Create a special AI message for it
-        ai_message = f"Here're the result of your QA Chain usage: \n\n Your question: {queued_message['question']} \n\n Answer: {queued_message['answer']} \n\n\n\n I hope this helps you! I'm here to further discuss the topic or for any questions."
+        ai_message = f"Here're the result of your QA Chain usage, let's look at it together:\n\nquestion: {queued_message['question']}\nanswer: {queued_message['answer']}"
 
         # Save context to the conversation memory
         st.session_state.conversation.memory.save_context(

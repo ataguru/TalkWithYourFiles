@@ -1,5 +1,11 @@
 import streamlit as st
 
+# to be refactored:
+# 1- seperate sections for each use key, if extends too much consider sub directories
+# 2- tokenbalancer to its own module 
+# 3- integrate param controller to chatbot
+
+
 ##########################################################
 ##########################################################
 ### QA CHAIN
@@ -116,7 +122,7 @@ def create_authorization_box(flow_coordinator):
 
         
 
-
+### only a helper function to create_authorization_box.
 def authorization_status_box(isvalid):
     """Creates a green or red box depending on the value of the `isvalid` variable."""
     if isvalid:
@@ -218,6 +224,40 @@ def token_calculator_question_tokens(completion_tokens, context_tokens, selected
 
 ##########################################################
 ##########################################################
-### Chatbot
+### Chatbot   ---- to be refactored
+########################################################## 
 ##########################################################
-##########################################################
+def get_chat_bot_info_dict():
+    chat_bot_info_dict = {
+                        "model": "text-davinci-003", 
+                        "type": "llm", 
+                        "description": "Can do any language task with better quality, longer output, and consistent instruction-following than the curie, babbage, or ada models. Also supports some additional features such as inserting text.",
+                        "prompt": """
+                            The following is a friendly conversation between a human and an AI.\n
+                            The AI is in the form of llm chatbot in an application called Talk With Your Files. \n
+                            AI is talkative & fun. \n
+                            AI has already introduced itself with a default message. And does not greet and explains its purpose unless it's prompted.     
+                            AI does not make any assumptions around this app. \n 
+                            If the AI does not know the answer to a question, it truthfully says it does not know. \n
+                            If questions have no clear answers redirect user to check out the documentations. \n
+                            If the questions are not specific to this application, AI can be creative and use its own knowledge  \n
+                            
+                            REMEMBER: AI is there to help with all appropriate questions of users, not just the files. Provide higher level guidance with abstraction and \n
+                            fun & creative.
+
+                            This application's capabilities: \n
+                            1) Talk with AI chat bot (this one), \n 
+                            2) Run a question answer chain over documents to answer users questions over uploaded files. \n
+                            2.1) Modify the qa chain behaviour with dynamic parameters visible on GUI  \n
+                            2.2) Choose to use qa chain standalone or by integrating the results into the chatbot conversation. \n
+                            3) Monitor active parameters that're in use.
+
+                            documentation: https://github.com/Safakan/TalkWithYourFiles \n
+
+                            Current conversation: {history} \n    
+                            Human: {input} \n
+                            AI Assistant:    
+                            """
+                 
+                        }
+    return chat_bot_info_dict
