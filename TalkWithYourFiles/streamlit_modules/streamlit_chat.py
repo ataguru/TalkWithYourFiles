@@ -10,7 +10,7 @@ import streamlit.components.v1 as components
 
 
 from pydantic.error_wrappers import ValidationError
-
+import os
 
 
 from langchain.prompts.prompt import PromptTemplate
@@ -64,11 +64,19 @@ class Message:
     message: str
 
 def load_css():
-    current_dir = os.path.dirname(__file__)
-    css_path = os.path.join(current_dir, "static/styles.css")
+    # # current_dir = os.path.dirname(__file__)
+    # # css_path = os.path.join(current_dir, "static", "styles.css")
+    # # with open(css_path, "r") as f:
+    # with open("static/styles.css", "r") as f:
+    #     css = f"<style>{f.read()}</style>"
+    #     st.markdown(css, unsafe_allow_html=True)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    css_path = os.path.join(current_dir, "..", "static", "styles.css")
     with open(css_path, "r") as f:
         css = f"<style>{f.read()}</style>"
         st.markdown(css, unsafe_allow_html=True)
+
+
 
 def initialize_session_state():
     if "history" not in st.session_state:
