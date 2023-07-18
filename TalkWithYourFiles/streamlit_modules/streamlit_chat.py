@@ -15,12 +15,6 @@ import os
 
 from langchain.prompts.prompt import PromptTemplate
 
-## to deal with streamlit not supporting static serving of images
-import base64
-from PIL import Image
-
-
-
 
 ## REFACTORING AND CONNECTING TO FLOWCOORDINATOR
 ## Store params in param_controller
@@ -133,21 +127,14 @@ def main_chat():
     prompt_placeholder = st.form("chat-form")
     credit_card_placeholder = st.empty()
 
-    ## parse icon images to base64
-    ai_icon_base64 = get_image_base64(os.path.join("app", "static", "ai_icon.png"))
-    user_icon_base64 = get_image_base64(os.path.join("app", "static", "user_icon.png"))
-
-
-
     with chat_placeholder:
         for chat in st.session_state.history:
             div = f"""
     <div class="chat-row 
         {'' if chat.origin == 'ai' else 'row-reverse'}">
-        <img class="chat-icon" src="app/static/{
-            ai_icon_base64 if chat.origin == 'ai' 
-                        else 'user_icon.png'}"
-            width=32 height=32>
+        <div class="chat-icon" style="font-size: 32px;">
+            {'🧙‍♂️' if chat.origin == 'ai' else '👀'}
+        </div>
         <div class="chat-bubble
         {'ai-bubble' if chat.origin == 'ai' else 'human-bubble'}">
             &#8203;{chat.message}
@@ -237,25 +224,6 @@ def integrate_chain_into_chat(user_question, response):
 
 
 
-########### workaround for static serving images
-def get_image_base64(image_path):
-    with open(image_path, "rb") as img_file:
-        return base64.b64encode(img_file.read()).decode('utf-8')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -267,3 +235,22 @@ def get_image_base64(image_path):
 #         st.session_state.chat_focused = True
 #     else:
 #         st.session_state.chat_focused = False
+
+
+
+
+
+### remove after use of reference:
+#         div = f"""
+# <div class="chat-row 
+#     {'' if chat.origin == 'ai' else 'row-reverse'}">
+#     <img class="chat-icon" src="app/static/{
+#         'ai_icon.png' if chat.origin == 'ai' 
+#                     else 'user_icon.png'}"
+#         width=32 height=32>
+#     <div class="chat-bubble
+#     {'ai-bubble' if chat.origin == 'ai' else 'human-bubble'}">
+#         &#8203;{chat.message}
+#     </div>
+# </div>
+#         """
