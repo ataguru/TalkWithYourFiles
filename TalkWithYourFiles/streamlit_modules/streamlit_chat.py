@@ -64,7 +64,9 @@ class Message:
     message: str
 
 def load_css():
-    with open("static/styles.css", "r") as f:
+    current_dir = os.path.dirname(__file__)
+    css_path = os.path.join(current_dir, "static/styles.css")
+    with open(css_path, "r") as f:
         css = f"<style>{f.read()}</style>"
         st.markdown(css, unsafe_allow_html=True)
 
