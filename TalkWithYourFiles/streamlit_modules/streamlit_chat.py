@@ -15,6 +15,12 @@ import os
 
 from langchain.prompts.prompt import PromptTemplate
 
+## to deal with streamlit not supporting static serving of images
+import base64
+from PIL import Image
+
+
+
 
 ## REFACTORING AND CONNECTING TO FLOWCOORDINATOR
 ## Store params in param_controller
@@ -64,12 +70,7 @@ class Message:
     message: str
 
 def load_css():
-    # # current_dir = os.path.dirname(__file__)
-    # # css_path = os.path.join(current_dir, "static", "styles.css")
-    # # with open(css_path, "r") as f:
-    # with open("static/styles.css", "r") as f:
-    #     css = f"<style>{f.read()}</style>"
-    #     st.markdown(css, unsafe_allow_html=True)
+    ## uses absolute path. needs modifying if static folder or the current folder changes.
     current_dir = os.path.dirname(os.path.abspath(__file__))
     css_path = os.path.join(current_dir, "..", "static", "styles.css")
     with open(css_path, "r") as f:
@@ -132,13 +133,19 @@ def main_chat():
     prompt_placeholder = st.form("chat-form")
     credit_card_placeholder = st.empty()
 
+    ## parse icon images to base64
+    ai_icon_base64 = get_image_base64(os.path.join("app", "static", "ai_icon.png"))
+    user_icon_base64 = get_image_base64(os.path.join("app", "static", "user_icon.png"))
+
+
+
     with chat_placeholder:
         for chat in st.session_state.history:
             div = f"""
     <div class="chat-row 
         {'' if chat.origin == 'ai' else 'row-reverse'}">
         <img class="chat-icon" src="app/static/{
-            'ai_icon.png' if chat.origin == 'ai' 
+            ai_icon_base64 if chat.origin == 'ai' 
                         else 'user_icon.png'}"
             width=32 height=32>
         <div class="chat-bubble
@@ -227,6 +234,30 @@ def integrate_chain_into_chat(user_question, response):
 
         # Use this to force rerun 
         st.experimental_rerun()
+
+
+
+########### workaround for static serving images
+def get_image_base64(image_path):
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode('utf-8')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
