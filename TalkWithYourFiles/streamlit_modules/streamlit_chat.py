@@ -8,46 +8,47 @@ from langchain.chains import ConversationChain
 from langchain.chains.conversation.memory import ConversationSummaryMemory
 import streamlit.components.v1 as components
 
-
 from pydantic.error_wrappers import ValidationError
-import os
 
+import os
 
 from langchain.prompts.prompt import PromptTemplate
 
 
-## REFACTORING AND CONNECTING TO FLOWCOORDINATOR
-## Store params in param_controller
-## maybe shape the param_controller or sub types of param_controllers?
+# REFACTORING AND CONNECTING TO FLOWCOORDINATOR recommended
 
-
+# Integration with param controller:
+# # # chatbot_prompt
+# # # chatbot model name
+# # # chatbot temperature
+# # # chatbot description
 
 def get_ai_prompt_chat_bot():
     template = """
-    The following is a friendly conversation between a human and an AI.\n
-    The AI is in the form of llm chatbot in an application called Talk With Your Files. \n
-    AI is talkative & fun. \n
-    AI has already introduced itself with a default message. And does not greet and explains its purpose unless it's prompted.     
-    AI does not make any assumptions around this app. \n 
-    If the AI does not know the answer to a question, it truthfully says it does not know. \n
-    If questions have no clear answers redirect user to check out the documentations. \n
-    If the questions are not specific to this application, AI can be creative and use its own knowledge  \n
-    
-    REMEMBER: AI is there to help with all appropriate questions of users, not just the files. Provide higher level guidance with abstraction and \n
-    fun & creative.
+            The following is a friendly conversation between a human and an AI.\n
+            The AI is in the form of llm chatbot in an application called Talk With Your Files. \n
+            AI is talkative & fun. \n
+            AI has already introduced itself with a default message. And does not greet and explains its purpose unless it's prompted.     
+            AI does not make any assumptions around this app. \n 
+            If the AI does not know the answer to a question, it truthfully says it does not know. \n
+            If questions have no clear answers redirect user to check out the documentations. \n
+            If the questions are not specific to this application, AI can be creative and use its own knowledge  \n
+            
+            REMEMBER: AI is there to help with all appropriate questions of users, not just the files. Provide higher level guidance with abstraction and \n
+            fun & creative.
 
-    This application's capabilities: \n
-    1) Talk with AI chat bot (this one), \n 
-    2) Run a question answer chain over documents to answer users questions over uploaded files. \n
-    2.1) Modify the qa chain behaviour with dynamic parameters visible on GUI  \n
-    2.2) Choose to use qa chain standalone or by integrating the results into the chatbot conversation. \n
-    3) Monitor active parameters that're in use.
+            This application's capabilities: \n
+            1) Talk with AI chat bot (this one), \n 
+            2) Run a question answer chain over documents to answer users questions over uploaded files. \n
+            2.1) Modify the qa chain behaviour with dynamic parameters visible on GUI  \n
+            2.2) Choose to use qa chain standalone or by integrating the results into the chatbot conversation. \n
+            3) Monitor active parameters that're in use.
 
-    documentation: https://github.com/Safakan/TalkWithYourFiles \n
+            documentation: https://github.com/Safakan/TalkWithYourFiles \n
 
-    Current conversation: {history} \n    
-    Human: {input} \n
-    AI Assistant:    
+            Current conversation: {history} \n    
+            Human: {input} \n
+            AI Assistant:  
     """
     prompt = PromptTemplate(input_variables=["history", "input"], template=template)
     return prompt

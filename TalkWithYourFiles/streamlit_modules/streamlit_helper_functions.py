@@ -1,4 +1,5 @@
 import streamlit as st
+import copy
 
 # to be refactored:
 # 1- seperate sections for each use key, if extends too much consider sub directories
@@ -227,37 +228,26 @@ def token_calculator_question_tokens(completion_tokens, context_tokens, selected
 ### Chatbot   ---- to be refactored
 ########################################################## 
 ##########################################################
-def get_chat_bot_info_dict():
-    chat_bot_info_dict = {
-                        "model": "text-davinci-003", 
-                        "type": "llm", 
-                        "description": "Can do any language task with better quality, longer output, and consistent instruction-following than the curie, babbage, or ada models. Also supports some additional features such as inserting text.",
-                        "prompt": """
-                            The following is a friendly conversation between a human and an AI.\n
-                            The AI is in the form of llm chatbot in an application called Talk With Your Files. \n
-                            AI is talkative & fun. \n
-                            AI has already introduced itself with a default message. And does not greet and explains its purpose unless it's prompted.     
-                            AI does not make any assumptions around this app. \n 
-                            If the AI does not know the answer to a question, it truthfully says it does not know. \n
-                            If questions have no clear answers redirect user to check out the documentations. \n
-                            If the questions are not specific to this application, AI can be creative and use its own knowledge  \n
-                            
-                            REMEMBER: AI is there to help with all appropriate questions of users, not just the files. Provide higher level guidance with abstraction and \n
-                            fun & creative.
+def get_chat_bot_info_dict(param_controller):
+    data_copy = copy.deepcopy(param_controller.parameters)
 
-                            This application's capabilities: \n
-                            1) Talk with AI chat bot (this one), \n 
-                            2) Run a question answer chain over documents to answer users questions over uploaded files. \n
-                            2.1) Modify the qa chain behaviour with dynamic parameters visible on GUI  \n
-                            2.2) Choose to use qa chain standalone or by integrating the results into the chatbot conversation. \n
-                            3) Monitor active parameters that're in use.
+    return data_copy["chatbot_llm"]
 
-                            documentation: https://github.com/Safakan/TalkWithYourFiles \n
 
-                            Current conversation: {history} \n    
-                            Human: {input} \n
-                            AI Assistant:    
-                            """
-                 
-                        }
-    return chat_bot_info_dict
+def get_qa_chain_info_dict(param_controller):
+    data_copy = copy.deepcopy(param_controller.parameters)
+    
+    # create a list of keys from the dictionary
+    keys = list(data_copy.keys())
+    
+    # iterate over the keys in the list
+    for key in keys:
+        # if the key is not in the allowed list, remove it
+        if key not in ["chunk_size", "chunk_overlap", "top_related_chunks", "requested_max_model_tokens", "displayed_max_response_tokens", "model_name"]:
+            del data_copy[key]
+
+    # if 'model_name' is a key and it has 'model_list', remove 'model_list'
+    if 'model_name' in data_copy and 'model_list' in data_copy['model_name']:
+        del data_copy['model_name']['model_list']
+
+    return data_copy

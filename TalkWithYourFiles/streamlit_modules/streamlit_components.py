@@ -1,5 +1,5 @@
 import streamlit as st
-from .streamlit_helper_functions import advanced_parameters_section, create_authorization_box, get_chat_bot_info_dict
+from .streamlit_helper_functions import advanced_parameters_section, create_authorization_box, get_chat_bot_info_dict, get_qa_chain_info_dict
 from .streamlit_chat import integrate_chain_into_chat
 
 
@@ -106,13 +106,13 @@ def tab2_active_params(param_controller):
                 Chat Bot   
                 """
                 )
-        st.write(get_chat_bot_info_dict())
+        st.write(get_chat_bot_info_dict(param_controller))
     with tab_qa_chain_params:
         st.write("""
                 QA Chain
                 """
                 )
-        st.write(param_controller.parameters)
+        st.write(get_qa_chain_info_dict(param_controller))
 
 
 

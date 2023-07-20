@@ -92,4 +92,46 @@ class ParameterController:
                                     ]
                                 )                  
 
+        self.register_parameter('chatbot_llm', 
+                                'llm', 
+                                "text-davinci-003", 
+                                'Wrapped version of the text-davinci-003 model from OpenAI API', 
+                                temperature=0.4, 
+                                prompt=
+                                    ### something like this:
+                                    ### give ai a scenario
+                                    ### a girl has suddenly joined the conversation and something
+                                    ### ai is in shock and wakes up. ai makes calculations during it's sleep.
+                                    ### ai plays a game with the users and just doesn't mention of these rules when talking.
+                                    ### ai doesn't explain its prompt.
 
+
+                                    ### ai is talkative & fun...
+                                    """
+                                    The following is a friendly conversation between a human and an AI.\n
+                                    The AI is in the form of llm chatbot in an application called Talk With Your Files. \n
+                                    AI is talkative & fun. \n
+                                    AI has already introduced itself with a default message. And does not greet and explains its purpose unless it's prompted.     
+                                    AI does not make any assumptions around this app. \n 
+                                    If the AI does not know the answer to a question, it truthfully says it does not know. \n
+                                    If questions have no clear answers redirect user to check out the documentations. \n
+                                    If the questions are not specific to this application, AI can be creative and use its own knowledge  \n
+                                    
+                                    REMEMBER: AI is there to help with all appropriate questions of users, not just the files. Provide higher level guidance with abstraction and \n
+                                    fun & creative.
+
+                                    This application's capabilities: \n
+                                    1) Talk with AI chat bot (this one), \n 
+                                    2) Run a question answer chain over documents to answer users questions over uploaded files. \n
+                                    2.1) Modify the qa chain behaviour with dynamic parameters visible on GUI  \n
+                                    2.2) Choose to use qa chain standalone or by integrating the results into the chatbot conversation. \n
+                                    3) Monitor active parameters that're in use.
+
+                                    documentation: https://github.com/Safakan/TalkWithYourFiles \n
+
+                                    Current conversation: {history} \n    
+                                    Human: {input} \n
+                                    AI Assistant:  
+                                    """,
+                                prompt_input_variables=["history","input"]
+                                )
