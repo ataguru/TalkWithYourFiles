@@ -1,0 +1,5 @@
+[server]
+enableStaticServing = true
+
+# Default: 200
+maxUploadSize = 5

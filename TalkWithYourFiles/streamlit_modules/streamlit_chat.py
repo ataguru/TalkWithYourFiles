@@ -15,7 +15,10 @@ import os
 from langchain.prompts.prompt import PromptTemplate
 
 
-# REFACTORING AND CONNECTING TO FLOWCOORDINATOR recommended
+# REFACTORING AND CONNECTING TO FLOWCOORDINATOR is on the way.
+# This is a somewhat dirty module in the application, and the refactoring is the first in the to-do list.
+# By itself it's fine, but it requires refactoring towards integration.
+
 
 # Integration with param controller:
 # # # chatbot_prompt
@@ -27,16 +30,19 @@ def get_ai_prompt_chat_bot():
     template = """
             The following is a friendly conversation between a human and an AI.\n
             The AI is in the form of llm chatbot in an application called Talk With Your Files. \n
-            AI is talkative & fun. \n
-            AI has already introduced itself with a default message. And does not greet and explains its purpose unless it's prompted.     
+            AI's main purpose is to help the user find answers to their personal questions. \n
+            AI is not the help center of the application. \n
+            User can ask standalone questions or questions about the file they have uploaded. \n
+            
+            AI is talkative, fun, helpful and harmless. \n
+
             AI does not make any assumptions around this app. \n 
             If the AI does not know the answer to a question, it truthfully says it does not know. \n
-            If questions have no clear answers redirect user to check out the documentations. \n
-            If the questions are not specific to this application, AI can be creative and use its own knowledge  \n
+            If user asks questions about the app and AI has no clear answers, AI redirect user to check out the documentations. \n
+            AI can be creative and use its own knowledge if the questions are not specific to this application. \n
             
-            REMEMBER: AI is there to help with all appropriate questions of users, not just the files. Provide higher level guidance with abstraction and \n
-            fun & creative.
-
+            REMEMBER: AI is there to help with all appropriate questions of users, not just the files. Provide higher level guidance with abstraction. \n
+            
             This application's capabilities: \n
             1) Talk with AI chat bot (this one), \n 
             2) Run a question answer chain over documents to answer users questions over uploaded files. \n
@@ -46,6 +52,7 @@ def get_ai_prompt_chat_bot():
 
             documentation: https://github.com/Safakan/TalkWithYourFiles \n
 
+            AI uses conversation summary memory, and does not remember the exact words used in the chat, but it remembers the essential meanings. \n
             Current conversation: {history} \n    
             Human: {input} \n
             AI Assistant:  
@@ -78,7 +85,10 @@ def initialize_session_state():
     if "history" not in st.session_state:
         st.session_state.history = []
         # Append a welcoming message to the history.
-        st.session_state.history = [Message("ai", "Hi there! I'm here to guide & help you while using TalkWithYourFiles!")]
+        st.session_state.history = [Message("ai", 
+                                            "Hi there! I'm your AI assistant while using the app TalkWithYourFiles! \n  To start using the app, please authorize yourself using the sidebar on the left."
+                                            )
+                                    ]
     if 'queued_messages' not in st.session_state:
         st.session_state.queued_messages = []        
     if "token_count" not in st.session_state:
@@ -148,7 +158,7 @@ def main_chat():
             st.markdown("")
 
     with prompt_placeholder:
-        st.markdown("Prompt:")
+        st.markdown("Chat:")
         cols = st.columns((6, 1))
         cols[0].text_input(
             "Chat",
@@ -165,7 +175,7 @@ def main_chat():
     if st.session_state.api_key_valid:
         credit_card_placeholder.caption(f"""
         Used {st.session_state.token_count} tokens \n
-        Debug Langchain conversation: 
+        Debug Conversation Summary Memory: 
         {st.session_state.conversation.memory.buffer}
         """)
 

@@ -8,15 +8,24 @@ def setup_page_configurations():
     ##### PAGE CONFIGURATIONS
     st.set_page_config(
                     page_title="Talk With Your Files",
-                    page_icon="random",
+                    page_icon="🧙‍♂️",
                     layout="wide", # centered or wide
                     initial_sidebar_state="expanded", #auto, expanded, collapsed
                     menu_items={
                         'Get Help': 'https://github.com/Safakan',
-                        'Report a bug': "https://github.com/Safakan/TalkWithYourFiles-LLM-GUI",
-                        'About': "# This is a header. This is an *extremely* cool app!"
+                        'Report a bug': "https://github.com/Safakan/TalkWithYourFiles",
+                        'About': "Open source LLM GUI app allowing interactions with files!"
                         }
                     )
+
+    # ---- HIDE STREAMLIT STYLE ----
+    hide_streamlit_style = """
+                <style>
+                #MainMenu {visibility: hidden;}
+                footer {visibility: hidden;}
+                </style>
+                """
+    st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
 
 def setup_header_area():
@@ -25,12 +34,15 @@ def setup_header_area():
 
 def setup_sidebar(flow_coordinator):
     ##### SIDEBAR
-    st.sidebar.header("Talk With Your Files")
-    st.sidebar.write("Hello and welcome! I hope this helps you! <3")
+    st.sidebar.markdown("# Talk With Your Files 🪄")
+    st.sidebar.write("Hello! Here's an open-source tool for you. Query your files, modify the QA chain behaviour, monitor active parameters, feed the results into the chatbot if you prefer and debug the chatbot conversation. Stay tuned for the updates. Hope you love it! ❤️")
+
+    st.sidebar.markdown('Documentation & codebase: [github.com/Safakan/TalkWithYourFiles](https://www.github.com/Safakan/TalkWithYourFiles)')
     
+    st.sidebar.markdown("#### Authorization")
     ##### Authorization box for OpenAI API KEY
     create_authorization_box(flow_coordinator)
-
+    st.sidebar.write("API keys are not stored, and their use is limited to your present browser session.")
 
 
 def tab1_qa_chain_files(param_controller, flow_coordinator):
