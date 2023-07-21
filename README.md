@@ -46,6 +46,8 @@ This project is licensed under the [MIT License](LICENSE).
 
 
 ### Test Images
-![User Journey](images/user_journey.png)
+<img src="images/user_journey.png" alt="User Journey" width="500"/>
+
+
 ![QA Chain](images/qa_chain.png)
 ![Codebase Overview](images/codebase_overview.png)
