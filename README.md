@@ -38,16 +38,6 @@ Some points to improve/add in in the future:
 This project is licensed under the [MIT License](LICENSE).
 
 ## Diagrams
-### Script Overview
-![Script Overview](images/script_overview.png)
-
-### Process Overview
-![Script Overview](images/process_overview2.png)
-
-
-### Test Images
-<img src="images/user_journey.png" alt="User Journey" width="500"/>
-
-
+![User Journey](images/user_journey.png)
 ![QA Chain](images/qa_chain.png)
 ![Codebase Overview](images/codebase_overview.png)
