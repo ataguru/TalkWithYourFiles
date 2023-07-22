@@ -7,19 +7,17 @@ from langchain.callbacks import get_openai_callback
 In this file QAChainRunner class is implemented, which is responsible for running the Question Answering (QA) chain
 on provided documents and questions.
 
-The class utilizes the Langchain library for the underlying question answering capabilities.
 
-Usage:
-    1. Create an instance of QAChainRunner.
-    1.1 Optionally, specify the model name to use from OpenAI.
-    1.2 To use non-OpenAI models modify the self.llm instance variable.
-    2. Use the 'get_relative_chunks' method to find the most relevant chunks in the knowledge base for a given question.
-    3. Use the 'run_chain' method to execute the QA chain on the provided documents and question.
+Main functions:
+1- Setup: chosen parameters are stored to initialize the llm & shape the chain behaviour.
+2- Get Relative Chunks: similarity search (ranking) on the FAISS object created from texts derived from the files.
+3- Run Chain: Serves the question & retrieved chunks to the llm to get a response.
 
-Design Pattern:
-    This class follows the Chain of Responsibility design pattern, where each step in the QA chain acts as a handler
-    and can process the question or pass it to the next handler.
-    """
+Design:
+This class follows the chain of responsibility design pattern, where each step acts as a handler
+
+As with all other backend utils, this module is only responsible to support the flow coordinator.
+"""
 
 class QAChainRunner:
     ## by default it uses 'text-davinci-003' model from OpenAI, for simpler tasks with reduced costs 'gpt-3.5-turbo' can be used.
@@ -82,7 +80,7 @@ class QAChainRunner:
         """Run the QA chain on the provided documents and question.
 
         Parameters:
-        docs (List[str]): The documents to use in the QA chain.
+        docs (List[str]): The documents/chunks to use in the QA chain.
         user_question (str): The question to answer.
 
         Returns:

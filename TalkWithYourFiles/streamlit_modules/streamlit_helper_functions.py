@@ -3,8 +3,8 @@ import copy
 
 # to be refactored:
 # 1- seperate sections for each use key, if extends too much consider sub directories
-# 2- tokenbalancer to its own module 
-# 3- integrate param controller to chatbot
+# 2- tokenbalancer testing & implementation 
+# 3- integrate param controller & flow coordinator to chatbot
 
 
 ##########################################################
@@ -109,9 +109,18 @@ def create_authorization_box(flow_coordinator):
     if "api_key_valid" not in st.session_state:
         st.session_state.api_key_valid = None
     
+    st.sidebar.markdown(
+        """
+        Please enter your OpenAI API key
+        -[ need help?](https://yourhelpurl.com)
+        """,
+        unsafe_allow_html=True,
+    )
+
     input_api_key = st.sidebar.text_input(
-        "Enter your OpenAI API key", 
+        "", 
         type="password",
+        label_visibility="collapsed"
     )
 
     if input_api_key:

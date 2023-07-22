@@ -4,15 +4,12 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 
 
-
-
-
 """
 In this file Strategy Design Pattern is used to make this functionalities more flexible & maintainable.
 Currently there's only one text processor subclass which is called DefaultTextProcessor.
 
 If you met the need to extend this further by adding a new text processor subclass:
-1) Create a new subclass of TextProcessor in this file.
+1) Create a new subclass of TextProcessor in this module.
 2) Implement the split_text method: Define the logic to split the text into chunks according to the desired strategy.
 3) Implement the create_embeddings method: Define how to create embeddings or other representations from the text chunks.
 4) Optionally, implement any additional methods specific to your text processing strategy. 

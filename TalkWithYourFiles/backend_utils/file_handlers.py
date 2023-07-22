@@ -4,8 +4,9 @@ from docx import Document
 
 
 """
-In this file Factory Design Pattern is used to make this functionalities more flexible & maintainable.
+In this module the factory pattern is used to make this functionalities more flexible & maintainable.
 Currently there are four main file handlers for PDF, DOCX, CSV, TXT. 
+
 
 To extend these file types: 
 1) Create a new subclass of FileHandler in this file.

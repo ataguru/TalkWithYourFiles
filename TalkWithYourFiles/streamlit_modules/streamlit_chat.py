@@ -17,10 +17,10 @@ from langchain.prompts.prompt import PromptTemplate
 
 # REFACTORING AND CONNECTING TO FLOWCOORDINATOR is on the way.
 # This is a somewhat dirty module in the application, and the refactoring is the first in the to-do list.
-# By itself it's fine, but it requires refactoring towards integration.
+# By itself it's fine, but it requires refactoring towards integration into the app design.
 
 
-# Integration with param controller:
+# Integration with param controller & flow coordinator:
 # # # chatbot_prompt
 # # # chatbot model name
 # # # chatbot temperature
@@ -125,11 +125,8 @@ def on_click_callback():
 
 def main_chat():
     load_css()
-    # try:
     initialize_session_state()
-    # except ValidationError as ve:
-    #     st.write("Invalid or missing API key.")
-    #     return "Invalid or missing API key. Please ensure you have entered a valid OpenAI API key."
+
       
 
     ########### start gui
@@ -232,36 +229,3 @@ def integrate_chain_into_chat(user_question, response):
 
         # Use this to force rerun 
         st.experimental_rerun()
-
-
-
-
-
-
-
-
-# #### make sure the enter only triggers when focused on the input box
-# def chat_input_on_change(chat_input):
-#     if chat_input:
-#         st.session_state.chat_focused = True
-#     else:
-#         st.session_state.chat_focused = False
-
-
-
-
-
-### remove after use of reference:
-#         div = f"""
-# <div class="chat-row 
-#     {'' if chat.origin == 'ai' else 'row-reverse'}">
-#     <img class="chat-icon" src="app/static/{
-#         'ai_icon.png' if chat.origin == 'ai' 
-#                     else 'user_icon.png'}"
-#         width=32 height=32>
-#     <div class="chat-bubble
-#     {'ai-bubble' if chat.origin == 'ai' else 'human-bubble'}">
-#         &#8203;{chat.message}
-#     </div>
-# </div>
-#         """

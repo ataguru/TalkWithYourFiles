@@ -1,4 +1,7 @@
 
+#### Token Balancer implementation will be integrated into the application in the next release.
+#### It's not tested yet.
+
 ## total chunks to send to the model:
 ## context_tokens: chunks + user question 
 ## Requested completion tokens: model's response

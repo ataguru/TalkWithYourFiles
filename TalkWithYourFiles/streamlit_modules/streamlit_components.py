@@ -38,8 +38,10 @@ def setup_sidebar(flow_coordinator):
     st.sidebar.write("Hello! Here's an open-source tool for you. Query your files, modify the QA chain behaviour, monitor active parameters, feed the results into the chatbot if you prefer and debug the chatbot conversation. Stay tuned for the updates. Hope you love it! ❤️")
 
     st.sidebar.markdown('Documentation & codebase: [github.com/Safakan/TalkWithYourFiles](https://www.github.com/Safakan/TalkWithYourFiles)')
-    
-    st.sidebar.markdown("#### Authorization")
+    st.sidebar.write("Please visit to understand the app in depth.")
+
+
+    st.sidebar.markdown("### Authorization")
     ##### Authorization box for OpenAI API KEY
     create_authorization_box(flow_coordinator)
     st.sidebar.write("API keys are not stored, and their use is limited to your present browser session.")
@@ -47,7 +49,7 @@ def setup_sidebar(flow_coordinator):
 
 def tab1_qa_chain_files(param_controller, flow_coordinator):
     """
-    Main function to run the Streamlit interface and execute the run function from file_processor.
+    Main function to run the Streamlit interface and execute the run function from flow coordinator.
     This file follows the dependency inversion principle, and separates UI from backend functionalities:
     Streamlit framework is used to render the GUI and manage file uploads.
     To use other approaches or frameworks: 
@@ -108,7 +110,7 @@ def tab1_qa_chain_files(param_controller, flow_coordinator):
 
 
 def tab2_active_params(param_controller):
-    ## for testing purposes - to see the params in the UI as I change them.
+    ## for testing purposes - to see the params in the UI as we change them.
 
     # tab_chat_bot_params, tab_qa_chain_params = st.tabs(["Chat Bot", "QA Chain"])
     tab_chat_bot_params, tab_qa_chain_params = st.columns(2)
