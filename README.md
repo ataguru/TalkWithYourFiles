@@ -1,14 +1,21 @@
 # Talk With Your Files (LLM(Langchain), GUI(Streamlit))
 
 ## Description
-Talk-With-Your-Files is an open source GUI (Graphical User Interface) application powered by LLMs (Large Language Models). It allows you to ask questions about your PDF, DOCX, CSV, or TXT files and get relevant answers.
+Talk-With-Your-Files is an open source GUI (Graphical User Interface) application powered by LLMs (Large Language Models).
+
+### Functionalities
+- Question your files (PDF, DOCX, CSV, TXT) and choose to integrate results into the chatbot.
+- Conversation with an LLM.
+- Tweak the qa chain behaviour with dynamic parameters & monitor within GUI.
 
 It is not dependent on any specific framework, as long as the underlying logics are provided it will work as it is.
+
 Current frameworks in use:
 Langchain - Handle LLM integration & processing texts.
 Streamlit - Prepare the GUI
 
 ## Installation
+
 1. Clone the repository: `git clone https://github.com/Safakan/TalkWithYourFiles-LLM-GUI.git` or by using the GitHub Desktop app.
 2. Install the required dependencies: `pip install -r requirements.txt` (ideally in a virtual environment)
 3. Create a .env file in the directory specifying your OpenAI API key as showned in the .env.example file.
