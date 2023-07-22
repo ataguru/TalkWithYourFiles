@@ -20,6 +20,7 @@ Current frameworks in use:
 1. Clone the repository: `git clone https://github.com/Safakan/TalkWithYourFiles.git` or by using the GitHub Desktop app.
 2. Install the required dependencies: `pip install -r requirements.txt` (ideally in a virtual environment)
 3. Create a .env file in the directory specifying your OpenAI API key as showned in the .env.example file.
+
 OR
 1. Create a docker container using the Dockerfile.
    
@@ -29,6 +30,7 @@ OR
 3. Wait for the application to run on your browser.
 4. Authenticate yourself on the sidebar with your api key.
 5. Start getting answers to your questions!
+
 OR
 1. Test the app in this demo production environment: www.twyf.safakan.com
 
