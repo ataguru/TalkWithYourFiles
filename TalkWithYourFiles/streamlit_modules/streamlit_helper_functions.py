@@ -112,7 +112,7 @@ def create_authorization_box(flow_coordinator):
     st.sidebar.markdown(
         """
         Please enter your OpenAI API key
-        -[ need help?](https://yourhelpurl.com)
+        -[ need help?](https://help.openai.com/en/articles/4936850-where-do-i-find-my-secret-api-key)
         """,
         unsafe_allow_html=True,
     )
