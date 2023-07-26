@@ -3,11 +3,15 @@
 ## Description
 Talk-With-Your-Files is an open source GUI (Graphical User Interface) application powered by LLMs (Large Language Models). The aim is to allow interactions with files in ways that were not possible before and taking steps towards making everything open source. 
 
+The demo production environment can be found here: www.twyf.safakan.com
+
+
 ### Functionalities
+![User Journey](images/user_journey.png)
 - Question your files (PDF, DOCX, CSV, TXT) and choose to integrate results into the chatbot.
 - Conversation with an LLM.
 - Tweak the qa chain behaviour with dynamic parameters & monitor within GUI.
-- Monitor conversation history
+- Monitor conversation history (Summary Memory)
 
 It is not dependent on any specific framework, as long as the underlying logics are provided it will work as it is.
 
@@ -15,11 +19,14 @@ Current frameworks in use:
 - Langchain - Handle LLM integration & processing texts.
 - Streamlit - Prepare the GUI
 
+### Limitations
+- Currently uses OpenAI API only, but the next update will introduce integration open source models such as LLama2, mpt-7b, ...
+- While the QA Chain has dynamic parameters, the parameters of the chat functionality are static and will also be sorted in the next update.
+  
 ## Installation
 
 1. Clone the repository: `git clone https://github.com/Safakan/TalkWithYourFiles.git` or by using the GitHub Desktop app.
 2. Install the required dependencies: `pip install -r requirements.txt` (ideally in a virtual environment)
-3. Create a .env file in the directory specifying your OpenAI API key as showned in the .env.example file.
 
 OR
 1. Create a docker container using the Dockerfile.
@@ -52,7 +59,6 @@ Some points to improve/add in in the future:
 ## License
 This project is licensed under the [MIT License](LICENSE).
 
-## Diagrams
-![User Journey](images/user_journey.png)
+## Process Diagrams
 ![QA Chain](images/qa_chain.png)
 ![Codebase Overview](images/codebase_overview.png)
