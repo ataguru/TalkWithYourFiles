@@ -229,3 +229,6 @@ def integrate_chain_into_chat(user_question, response):
 
         # Use this to force rerun 
         st.experimental_rerun()
+
+
+

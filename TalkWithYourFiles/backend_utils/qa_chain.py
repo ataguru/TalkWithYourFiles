@@ -16,7 +16,7 @@ Main functions:
 Design:
 This class follows the chain of responsibility design pattern, where each step acts as a handler
 
-As with all other backend utils, this module is only responsible to support the flow coordinator.
+As with all other backend utils, this module is only responsible to support the flow coordinator by providing the actual implementations.
 """
 
 class QAChainRunner:

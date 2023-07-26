@@ -45,7 +45,15 @@ def setup_sidebar(flow_coordinator):
     ##### Authorization box for OpenAI API KEY
     create_authorization_box(flow_coordinator)
     st.sidebar.write("API keys are not stored, and their use is limited to your present browser session.")
+    
 
+    st.sidebar.markdown(
+        """
+        Stay tuned for the open-source models! While using OpenAI models, there'll be minimal costs based on your usage.
+        -[ see pricing here](https://openai.com/pricing)
+        """,
+        unsafe_allow_html=True,
+    )
 
 def tab1_qa_chain_files(param_controller, flow_coordinator):
     """

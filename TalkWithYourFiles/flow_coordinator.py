@@ -23,10 +23,10 @@ It's dependent on low level modules by implementing higher level abstractions in
 File Handling: 
 The FileHandlerFactory class from file_handlers.py is utilized to obtain the appropriate file handler based on the file type. The selected handler is then used to read the file's contents. 
 
-Text Processing:
+## Text Processing:
 The DefaultTextProcessor class from text_processor.py provides text processing functionality, such as splitting text into chunks and creating embeddings.
 
-Question-Answering Chain Execution: 
+## Question-Answering Chain Execution: 
 The QAChainRunner class from qa_chain.py is instantiated, representing the question-answering chain runner. This class uses an LLM to execute the chain. The get_relative_chunks() method finds the most relevant chunks in the knowledge base for a given user question, and the run_chain() method runs the question-answering chain on the provided documents and question.
 
 
