@@ -3,7 +3,7 @@
 ## Description
 Talk-With-Your-Files is an open source GUI (Graphical User Interface) application powered by LLMs (Large Language Models). The aim is to allow interactions with files in ways that were not possible before and taking steps towards making everything open source. 
 
-The demo production environment can be found here: www.twyf.safakan.com
+The demo production environment can be found here: https://twyf.safakan.com/
 
 
 ### Functionalities
