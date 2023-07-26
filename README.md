@@ -39,7 +39,7 @@ OR
 5. Start getting answers to your questions!
 
 OR
-1. Test the app in this demo production environment: www.twyf.safakan.com
+1. Test/use the app in the demo production environment.
 
 ## Process Diagrams
 ![QA Chain](images/qa_chain.png)
