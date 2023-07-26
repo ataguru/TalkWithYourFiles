@@ -41,6 +41,10 @@ OR
 OR
 1. Test the app in this demo production environment: www.twyf.safakan.com
 
+## Process Diagrams
+![QA Chain](images/qa_chain.png)
+![Codebase Overview](images/codebase_overview.png)
+
 ## Tips
 1. Check individual modules for further documentation. 
 2. LLM model to be used can be changed on the GUI or by setting different parameters in parameter_controller.
@@ -59,6 +63,4 @@ Some points to improve/add in in the future:
 ## License
 This project is licensed under the [MIT License](LICENSE).
 
-## Process Diagrams
-![QA Chain](images/qa_chain.png)
-![Codebase Overview](images/codebase_overview.png)
+
